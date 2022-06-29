@@ -1,0 +1,72 @@
+GET http://localhost:3000/http-codes
+
+###
+POST http://localhost:3000/http-codes
+Content-Type: application/json
+
+{
+    "code": "OK",
+    "message": "OK"
+}
+
+###
+GET http://localhost:3000/http-codes/62b98762884925af68acba0e
+
+###
+PUT http://localhost:3000/http-codes/62b98762884925af68acba0e
+Content-Type: application/json
+
+{
+    "code": 200,
+    "message": "ok"
+}
+###
+DELETE http://localhost:3000/http-codes/62b989c6b1d4a19ea9b679bd
+
+###
+GET http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs
+
+###
+GET http://localhost:3000/users/1
+
+###
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "email": "ok@ok.com",
+    "password": "OKOKOK",
+    "firstname": "OK"
+}
+
+###
+PUT http://localhost:3000/users/2
+Content-Type: application/json
+
+{
+    "firstname": "O"
+}
+
+###
+DELETE http://localhost:3000/users/3
+
+
+###
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+    "email": "ok2@ok.com",
+    "password": "OKOKOK",
+    "firstname": "OK"
+}
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "ok@ok.com",
+    "password": "OKOKOK"
+}
