@@ -5,14 +5,8 @@ import './index.css';
 import  'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Ex4 from './component/increment';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-// root.render(
-//   <React.StrictMode>
-//     <Ex4 />
-//   </React.StrictMode>
-// );
 
 root.render(
     <BrowserRouter>

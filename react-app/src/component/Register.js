@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useState} from "react";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
@@ -7,6 +7,9 @@ import Col from 'react-bootstrap/Col';
 import {Link} from "react-router-dom";
 
 export default function Register() {
+
+    const [email, setEmail] = useState('');
+
     return (
         <Fragment>
             <Container>
@@ -17,7 +20,7 @@ export default function Register() {
                                 <Card.Body>
                                     <Card.Title>Inscription</Card.Title>
                                     <div className="input-group mb-3">
-                                        <input type="email" className="form-control" placeholder="email@mail.com" aria-label="Email" aria-describedby="basic-addon1"/>
+                                        <input type="email" value={email} onChange={(e) => {setEmail(e.target.value)}} className="form-control" placeholder="email@mail.com" aria-label="Email" aria-describedby="basic-addon1"/>
                                     </div>
 
                                     <div className="input-group mb-3">
