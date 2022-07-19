@@ -14,13 +14,14 @@ const formatError = (validationError) => {
 
 router.post("/register", async (req, res) => {
   const email = req.body.email.trim();
+  const pseudo = req.body.pseudo.trim();
 
   try {
     const result = await User.create({
       email: email,
-      password: '1234567',
+      password: req.body.password,
       isAdmin: false,
-      firstname: 'John'
+      firstname: pseudo
     });
     res.status(201).json(result);
   } catch (error) {

@@ -31,7 +31,7 @@ export default function Profile() {
 
                                 <Row>
                                     <Col lg={6}>
-                                        <p>Mes technologies préférées</p>
+                                        <p>Mes technologies préférées :</p>
                                         <MultiSelect
                                             options={options}
                                             value={selected}
@@ -40,7 +40,7 @@ export default function Profile() {
                                         />
                                     </Col>
                                     <Col lg={6}>
-                                        <p>Changement du mot de passe</p>
+                                        <p>Changement du mot de passe :</p>
 
                                         <div className="input-group mb-3">
                                             <input

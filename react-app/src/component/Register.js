@@ -20,6 +20,7 @@ const request = new XMLHttpRequest();
 export default function Register() {
 
     const [email, setEmail] = useState('');
+    const [pseudo, setPseudo] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [selected, setSelected] = useState([]);
@@ -31,7 +32,9 @@ export default function Register() {
             request.setRequestHeader("Content-type", "application/json");
             request.send(JSON.stringify({
                 "email": email,
+                "pseudo": pseudo,
                 "password": password,
+                "technologies": selected
             }));
             // return request.responseText;
         },
@@ -57,6 +60,19 @@ export default function Register() {
                                             aria-label="Email"
                                             aria-describedby="basic-addon1"
                                             name="email"
+                                        />
+                                    </div>
+
+                                    <div className="input-group mb-3">
+                                        <input
+                                            type="text"
+                                            value={pseudo}
+                                            onChange={(e) => {setPseudo(e.target.value)}}
+                                            className="form-control"
+                                            placeholder="Pseudo"
+                                            aria-label="Pseudo"
+                                            aria-describedby="basic-addon1"
+                                            name="pseudo"
                                         />
                                     </div>
 
