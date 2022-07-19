@@ -25,6 +25,9 @@ router.post("/register", async (req, res) => {
   //   }
   // }
   console.log('zhfzhebfzbfhj')
+  console.log(req.body.email)
+  res.status(200);
+
 });
 
 router.post("/login", async (req, res) => {
