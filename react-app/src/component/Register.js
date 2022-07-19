@@ -24,6 +24,10 @@ export default function Register() {
     const save = useCallback(
         () => {
             console.log(selected);
+            const request = new XMLHttpRequest();
+            request.open( "POST", 'http://localhost:3001/register', false ); //false for synchronous request
+            request.send( null );
+            // return request.responseText;
         },
         [selected]
     );

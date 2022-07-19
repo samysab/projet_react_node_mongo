@@ -13,17 +13,18 @@ const formatError = (validationError) => {
 };
 
 router.post("/register", async (req, res) => {
-  try {
-    const result = await User.create(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    if (error instanceof ValidationError) {
-      res.status(422).json(formatError(error));
-    } else {
-      res.sendStatus(500);
-      console.error(error);
-    }
-  }
+  // try {
+  //   const result = await User.create(req.body);
+  //   res.status(201).json(result);
+  // } catch (error) {
+  //   if (error instanceof ValidationError) {
+  //     res.status(422).json(formatError(error));
+  //   } else {
+  //     res.sendStatus(500);
+  //     console.error(error);
+  //   }
+  // }
+  console.log('zhfzhebfzbfhj')
 });
 
 router.post("/login", async (req, res) => {
