@@ -23,6 +23,7 @@ router.post("/register", async (req, res) => {
       isAdmin: false,
       firstname: pseudo
     });
+
     res.status(201).json(result);
   } catch (error) {
     if (error instanceof ValidationError) {
