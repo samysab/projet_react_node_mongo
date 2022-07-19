@@ -14,6 +14,9 @@ const options = [
     { label: "Node", value: "Node" },
 ];
 
+const request = new XMLHttpRequest();
+
+
 export default function Register() {
 
     const [email, setEmail] = useState('');
@@ -24,12 +27,15 @@ export default function Register() {
     const save = useCallback(
         () => {
             console.log(selected);
-            const request = new XMLHttpRequest();
-            request.open( "POST", 'http://localhost:3001/register', false ); //false for synchronous request
-            request.send( null );
+            request.open( "POST", 'http://localhost:5000/register', false ); //false for synchronous request
+            request.setRequestHeader("Content-type", "application/json");
+            request.send(JSON.stringify({
+                "email": email,
+                "password": password,
+            }));
             // return request.responseText;
         },
-        [selected]
+        [selected, email, password]
     );
 
     return (
