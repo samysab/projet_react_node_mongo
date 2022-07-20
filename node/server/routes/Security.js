@@ -61,14 +61,18 @@ router.post("/login", async (req, res) => {
       },
     });
     if (!result) {
-      res.status(401).json({
-        email: "Email not found",
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Email not found'
       });
       return;
     }
     if (!(await bcryptjs.compare(req.body.password, result.password))) {
-      res.status(401).json({
-        password: "Password is incorrect",
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Password is incorrect'
       });
       return;
     }
