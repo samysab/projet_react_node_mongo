@@ -43,7 +43,7 @@ router.post("/register", async (req, res) => {
 
     await transporter.sendMail({
         from: "pa.express.esgi@gmail.com",
-        to: "theodoresigaud@gmail.com",
+        to: email,
         subject: "Bienvenue",
         text: "Bienvenue sur notre nouveau site",
         html: `<p>Bienvenue sur notre nouveau site. Pour confirmer votre compte <a href="${url}">cliquez ici</a>.</p>`
