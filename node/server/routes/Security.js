@@ -5,13 +5,14 @@ const bcryptjs = require("bcryptjs");
 const { createToken } = require("../lib/jwt");
 const router = new Router();
 const nodemailer  = require("nodemailer");
+const crypto = require("crypto");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
+  host: "smtp-relay.sendinblue.com",
   port: 587,
   auth: {
-    user: "priscilla82@ethereal.email",
-    pass: "UjEQsw7qcGyczbxM84",
+    user: "mkajeiou3@myges.fr",
+    pass: "d2QULsktrxBwZGDF",
   }
 });
 
@@ -27,22 +28,64 @@ router.post("/register", async (req, res) => {
   const pseudo = req.body.pseudo.trim();
 
   try {
+    let token = crypto.randomBytes(64).toString('hex');
+
     const result = await User.create({
       email: email,
       password: req.body.password,
       isAdmin: false,
-      firstname: pseudo
+      firstname: pseudo,
+      status: 0,
+      token: token,
     });
+
+    let url = 'http://localhost:3000/confirmation/'+token;
 
     await transporter.sendMail({
         from: "pa.express.esgi@gmail.com",
         to: "theodoresigaud@gmail.com",
-        subject: "Bienvenue sur Express.esgi",
-        text: "Bienvenue sur toto Express.esgi",
-        html: `<h1>Bienvenue sudzdzaddnar Express.esgi</h1>`
+        subject: "Bienvenue",
+        text: "Bienvenue sur notre nouveau site",
+        html: `<p>Bienvenue sur notre nouveau site. Pour confirmer votre compte <a href="${url}">cliquez ici</a>.</p>`
     });
+    console.log("Message sent");
 
     res.status(201).json(result);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+});
+
+router.post("/confirmation", async (req, res) => {
+  try {
+    console.log(req.body.token);
+    const result = await User.update({
+        status: 1,
+        token: ''
+      }, {
+      where: {
+        token: req.body.token,
+      },
+    });
+
+    if (result[0] === 0) {
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Token is invalid',
+      });
+    }else {
+      res.status(200);
+      res.send({
+        success: true,
+        message: 'Success'
+      });
+    }
   } catch (error) {
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
@@ -58,6 +101,7 @@ router.post("/login", async (req, res) => {
     const result = await User.findOne({
       where: {
         email: req.body.email,
+        status: 1,
       },
     });
     if (!result) {
