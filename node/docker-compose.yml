@@ -36,6 +36,14 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
       - 5432:5432
+      
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8091:8080"
 volumes:
   mongo-data: {}
   db-data: {}
