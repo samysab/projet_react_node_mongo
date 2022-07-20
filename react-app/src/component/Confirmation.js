@@ -15,7 +15,8 @@ export default function Login() {
     const [alert, setAlert] = useState(false);
 
     useEffect(() => {
-        request.open("POST", 'http://localhost:5000/confirmation', false); //false for synchronous request
+        console.log('test');
+        request.open("PUT", 'http://localhost:5000/confirmation', false); //false for synchronous request
         request.setRequestHeader("Content-type", "application/json");
         request.send(JSON.stringify({
             "token": params.id,
@@ -26,7 +27,7 @@ export default function Login() {
         }else {
             setAlert(true);
         }
-    });
+    }, []);
 
     return (
         <Fragment>

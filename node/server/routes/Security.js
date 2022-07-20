@@ -46,9 +46,8 @@ router.post("/register", async (req, res) => {
         to: email,
         subject: "Bienvenue",
         text: "Bienvenue sur notre nouveau site",
-        html: `<p>Bienvenue sur notre nouveau site. Pour confirmer votre compte <a href="${url}">cliquez ici</a>.</p>`
+        html: `<h2>Bienvenue sur notre nouveau site. Pour confirmer votre compte <a href="${url}">cliquez ici</a>.</h2>`
     });
-    console.log("Message sent");
 
     res.status(201).json(result);
   } catch (error) {
@@ -61,9 +60,9 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/confirmation", async (req, res) => {
+router.put("/confirmation", async (req, res) => {
   try {
-    console.log(req.body.token);
+    console.log('test');
     const result = await User.update({
         status: 1,
         token: ''
@@ -80,6 +79,53 @@ router.post("/confirmation", async (req, res) => {
         message: 'Token is invalid',
       });
     }else {
+      res.status(200);
+      res.send({
+        success: true,
+        message: 'Success'
+      });
+    }
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+});
+
+router.post("/reset", async (req, res) => {
+  try {
+    const email = req.body.email.trim();
+
+    let token = crypto.randomBytes(64).toString('hex');
+
+    const result = await User.update({
+      token: token
+    }, {
+      where: {
+        email: email,
+      },
+    });
+
+    if (result[0] === 0) {
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Error',
+      });
+    }else {
+      let url = 'http://localhost:3000/resetPassword/'+token;
+
+      await transporter.sendMail({
+        from: "pa.express.esgi@gmail.com",
+        to: email,
+        subject: "Réinitialisation du mot de passe",
+        text: "Réinitialisation du mot de passe",
+        html: `<h2>Vous avez fait une demande de réinitialisation de votre mot de passe. Pour le réinitialiser <a href="${url}">cliquez ici</a>.</h2>`
+      });
+
       res.status(200);
       res.send({
         success: true,
