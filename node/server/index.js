@@ -4,6 +4,7 @@ const app = express();
 const HttpCodesRouter = require("./routes/HttpCode");
 const UserRouter = require("./routes/User");
 const PostRouter = require("./routes/Post");
+const MessageRouter = require("./routes/Message");
 const SecurityRouter = require("./routes/Security");
 const checkAuthentication = require("./middlewares/checkAuthentication");
 
@@ -15,6 +16,7 @@ app.get("/", (req, res, next) => {
 
 //app.use(HttpCodesRouter);
 app.use(SecurityRouter);
+app.use("/messages", checkAuthentication, MessageRouter);
 app.use("/http-codes", HttpCodesRouter);
 app.use("/users", checkAuthentication, UserRouter);
 app.use("/posts", checkAuthentication, PostRouter);
