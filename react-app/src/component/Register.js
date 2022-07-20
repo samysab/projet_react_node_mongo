@@ -38,7 +38,7 @@ export default function Register() {
             }));
             // return request.responseText;
         },
-        [selected, email, password]
+        [selected, email, password, pseudo]
     );
 
     return (

@@ -4,6 +4,16 @@ const { ValidationError } = require("sequelize");
 const bcryptjs = require("bcryptjs");
 const { createToken } = require("../lib/jwt");
 const router = new Router();
+const nodemailer  = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.ethereal.email",
+  port: 587,
+  auth: {
+    user: "priscilla82@ethereal.email",
+    pass: "UjEQsw7qcGyczbxM84",
+  }
+});
 
 const formatError = (validationError) => {
   return validationError.errors.reduce((acc, error) => {
@@ -22,6 +32,14 @@ router.post("/register", async (req, res) => {
       password: req.body.password,
       isAdmin: false,
       firstname: pseudo
+    });
+
+    await transporter.sendMail({
+        from: "pa.express.esgi@gmail.com",
+        to: "theodoresigaud@gmail.com",
+        subject: "Bienvenue sur Express.esgi",
+        text: "Bienvenue sur toto Express.esgi",
+        html: `<h1>Bienvenue sudzdzaddnar Express.esgi</h1>`
     });
 
     res.status(201).json(result);
