@@ -7,7 +7,8 @@ const { Post: PostMongo } = require("../mongo");
 exports.User.hasMany(exports.Post);
 exports.Post.belongsTo(exports.User);
 
-exports.User.belongsToMany(User, { through: Relationship});
+// exports.User.belongsToMany(exports.User, { as: 'follower', through: exports.Relationship });
+// exports.User.belongsToMany(exports.User, { as: 'following', through: exports.Relationship });
 
 async function denormalizePost(post) {
   await PostMongo.deleteOne({ _id: post.id });

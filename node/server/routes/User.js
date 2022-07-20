@@ -1,5 +1,7 @@
 const { Router } = require("express");
 const { User } = require("../models/postgres");
+const { Relationship } = require("../models/postgres");
+
 const { ValidationError } = require("sequelize");
 const checkIsAdmin = require("../middlewares/checkIsAdmin");
 const checkAuthentication = require("../middlewares/checkAuthentication");
@@ -13,6 +15,20 @@ const formatError = (validationError) => {
   }, {});
 };
 
+
+router.post("/follow/:id", async (req, res) => {
+  try {
+    const result = await Relationship.create(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+});
 
 router.get("/users", async (req, res) => {
   try {
