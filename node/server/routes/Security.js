@@ -76,6 +76,7 @@ router.post("/login", async (req, res) => {
       });
       return;
     }
+    res.status(200);
     res.json({ token: await createToken(result) });
   } catch (error) {
     res.sendStatus(500);

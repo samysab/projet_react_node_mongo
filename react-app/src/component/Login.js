@@ -6,6 +6,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import {Link} from "react-router-dom";
+import Cookies from 'universal-cookie';
+
 
 const request = new XMLHttpRequest();
 
@@ -24,9 +26,19 @@ export default function Login() {
                 "password": password,
             }));
 
-            if (!JSON.parse(request.response).success){
-                setAlert(true);
+            if (request.response !== 'OK') {
+                if (JSON.parse(request.response).success === false) {
+                    setAlert(true);
+                    return;
+                }
             }
+
+            const cookies = new Cookies();
+            cookies.set('token', JSON.parse(request.response).token, {
+                path: '/',
+                maxAge: 60 * 60 * 24 * 7,
+            });
+            console.log(JSON.parse(request.response).token);
         },
         [email, password]
     );
