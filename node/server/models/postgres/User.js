@@ -38,6 +38,14 @@ User.init(
         },
       },
     },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    token: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     sequelize,
@@ -49,6 +57,7 @@ User.addHook("beforeCreate", async (user) => {
   user.password = await bcryptjs.hash(user.password, await bcryptjs.genSalt());
 });
 User.addHook("beforeUpdate", async (user, { fields }) => {
+    console.log('titit')
   if (fields.includes("password")) {
     user.password = await bcryptjs.hash(
       user.password,

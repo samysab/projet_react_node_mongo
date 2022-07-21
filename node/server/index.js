@@ -6,8 +6,13 @@ const UserRouter = require("./routes/User");
 const PostRouter = require("./routes/Post");
 const SecurityRouter = require("./routes/Security");
 const checkAuthentication = require("./middlewares/checkAuthentication");
+const cors = require('cors')
 
 app.use(express.json());
+const corsOption = {
+  origin: ['http://localhost:3000'],
+};
+app.use(cors(corsOption));
 
 app.get("/", (req, res, next) => {
   res.send("Hello world!");
