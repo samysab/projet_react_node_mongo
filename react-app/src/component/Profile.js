@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useCallback, useEffect, useState} from "react";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import {Link} from "react-router-dom";
 import { MultiSelect } from "react-multi-select-component";
+import Cookies from 'universal-cookie';
 
 const options = [
     { label: "JavaScript", value: "JavaScript" },
@@ -14,11 +15,32 @@ const options = [
     { label: "Node", value: "Node" },
 ];
 
+const request = new XMLHttpRequest();
+
 export default function Profile() {
+
+    const cookies = new Cookies();
 
     const [selected, setSelected] = useState([]);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
+    useEffect(() => {
+            console.log(cookies.get('token'));
+            request.open("GET", 'http://localhost:5000/users/profile', false); //false for synchronous request
+            request.setRequestHeader("Content-type", "application/json");
+            request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));
+            request.send();
+        },
+        []
+    );
+
+    const update = useCallback(
+        () => {
+
+        },
+        []
+    );
 
     return (
         <Fragment>
@@ -67,7 +89,7 @@ export default function Profile() {
                                             />
                                         </div>
 
-                                        <Button variant="primary">Sauvegarder</Button>
+                                        <Button variant="primary" onClick={update}>Sauvegarder</Button>
                                     </Col>
                                 </Row>
                             </Card>
