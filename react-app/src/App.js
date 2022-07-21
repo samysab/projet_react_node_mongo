@@ -8,6 +8,7 @@ import Register from "./component/Register";
 import Profile from "./component/Profile";
 import Confirmation from "./component/Confirmation";
 import Reset from "./component/Reset";
+import Error404 from "./component/404";
 
 function App() {
   return (
@@ -21,8 +22,9 @@ function App() {
         <Route path="/resetPassword">
             <Route path=":id" element={<Reset />} />
         </Route>
+        <Route path="*" element={<Error404 />} />
       </Routes>
-  );
+);
 }
 
 export default App;
