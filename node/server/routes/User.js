@@ -2,7 +2,7 @@ const { Router } = require("express");
 const { User } = require("../models/postgres");
 const { Relationship } = require("../models/postgres");
 
-const { ValidationError } = require("sequelize");
+const { ValidationError, where } = require("sequelize");
 const checkIsAdmin = require("../middlewares/checkIsAdmin");
 const checkAuthentication = require("../middlewares/checkAuthentication");
 
@@ -27,6 +27,30 @@ router.post("/follow/:id", async (req, res) => {
       res.sendStatus(500);
       console.error(error);
     }
+  }
+});
+
+router.get("/friends", async (req, res) => {
+  try {
+    const result = await User.findAll({
+      where:{ id : 1},
+      include: [
+        {
+          model: User,
+          as: "following",
+          required: false,
+          attributes: ["firstname","id"],
+          through: {
+            attributes: ["status"],
+            where: { status: 1 }
+          }
+        },
+      ],
+    });
+    res.json(result);
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
   }
 });
 

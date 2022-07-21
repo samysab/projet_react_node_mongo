@@ -4,6 +4,8 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 
 
@@ -11,11 +13,10 @@ export default function ListUsers() {
 
     const [users, setUsers] = useState([]);
     const [followers, setFollowers] = useState([]);
-    let followersTmp = [];
+   
 
     useEffect(() => {
 
-        console.log("RENDU")
         const request = new XMLHttpRequest();
         request.onreadystatechange = function() {
             if (request.readyState == XMLHttpRequest.DONE) {
@@ -44,23 +45,16 @@ export default function ListUsers() {
                
             }));
 
-            // followersTmp.push(...followers);
-            // followersTmp.push(user);
-            // setFollowers(followersTmp);
-           
-          
+            let newFollowers = followers.slice();
+            newFollowers.push(user);
+            setFollowers(newFollowers);
         },
-        []
-
+        [followers]
     );
-
-    console.log(followers);
-
 
     return (
         <Fragment>
             <Container>
-               
                 <Row className="pt-5">
                     <Col md="3">
                         <ListGroup>
@@ -70,6 +64,7 @@ export default function ListUsers() {
                         </ListGroup>
                     </Col>
                     <Col>
+
                     {
                         users.map( user => {
                             return (
