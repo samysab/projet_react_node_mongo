@@ -1,16 +1,22 @@
-import React, {Fragment, useEffect, useState} from "react";
+import React, {Fragment, useCallback, useEffect, useState} from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import ListGroup from 'react-bootstrap/ListGroup';
 
-const request = new XMLHttpRequest();
+
 
 export default function ListUsers() {
 
     const [users, setUsers] = useState([]);
+    const [followers, setFollowers] = useState([]);
+    let followersTmp = [];
 
     useEffect(() => {
 
+        console.log("RENDU")
+        const request = new XMLHttpRequest();
         request.onreadystatechange = function() {
             if (request.readyState == XMLHttpRequest.DONE) {
                 setUsers(JSON.parse(request.responseText));
@@ -21,27 +27,61 @@ export default function ListUsers() {
         request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
         request.send();
 
-    }, []);
+    }, [followers]);
 
-   
+
+    const follow = useCallback(
+        (user) => {
+
+            const request = new XMLHttpRequest();
+            request.open( "POST", `http://localhost:5000/users/follow/${user.id}`, false ); 
+            request.setRequestHeader("Content-type", "application/json");
+            request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+            request.send(JSON.stringify({
+                "follower": 1,
+                "following": user.id,
+                "status": 0,
+               
+            }));
+
+            // followersTmp.push(...followers);
+            // followersTmp.push(user);
+            // setFollowers(followersTmp);
+           
+          
+        },
+        []
+
+    );
+
+    console.log(followers);
+
 
     return (
         <Fragment>
             <Container>
-                <Row>
-                    <h1>Liste des utilisateurs</h1>
-
+               
+                <Row className="pt-5">
+                    <Col md="3">
+                        <ListGroup>
+                            <ListGroup.Item>Suggestions</ListGroup.Item>
+                            <ListGroup.Item>Mes amies</ListGroup.Item>
+                            <ListGroup.Item>En attente</ListGroup.Item>
+                        </ListGroup>
+                    </Col>
+                    <Col>
                     {
                         users.map( user => {
                             return (
-                            <div className="d-flex" key={user.id}> 
-                                <li>{user.firstname}</li>
-                                <Button>Follow</Button>
+                            <div className="d-flex mt-2" key={user.id}> 
+                                <span>{user.firstname}</span>
+                                <Button className="mx-2" size="sm" onClick={ () => follow(user)}>Follow</Button>
                             </div>
                           
                             );
                         })
                     }
+                    </Col>
                 </Row>
             </Container>
         </Fragment>
