@@ -151,6 +151,7 @@ router.put("/resetPassword", async (req, res) => {
       where: {
         token: req.body.token,
       },
+      individualHooks: true,
     });
 
     if (result[0] === 0) {
