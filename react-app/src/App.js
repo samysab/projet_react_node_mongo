@@ -6,7 +6,9 @@ import {
 import Login from "./component/Login";
 import Register from "./component/Register";
 import Profile from "./component/Profile";
-import ListUsers from "./component/ListUsers";
+import Users from "./component/Users";
+
+import FriendRequest from "./component/FriendRequest";
 
 function App() {
   return (
@@ -14,7 +16,9 @@ function App() {
         <Route path="/" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/profile" element={<Profile/>}/>
-        <Route path="/users" element={<ListUsers/>}/>
+
+        <Route path="/users" element={<Users/>}/>
+        <Route path="/users/friend-request" element={<FriendRequest/>}/>
       </Routes>
   );
 }

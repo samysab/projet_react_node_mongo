@@ -6,10 +6,11 @@ import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import NavRelationship from './NavRelationship';
 
 
 
-export default function ListUsers() {
+export default function Users() {
 
     const [users, setUsers] = useState([]);
     const [followers, setFollowers] = useState([]);
@@ -57,11 +58,7 @@ export default function ListUsers() {
             <Container>
                 <Row className="pt-5">
                     <Col md="3">
-                        <ListGroup>
-                            <ListGroup.Item>Suggestions</ListGroup.Item>
-                            <ListGroup.Item>Mes amies</ListGroup.Item>
-                            <ListGroup.Item>En attente</ListGroup.Item>
-                        </ListGroup>
+                        <NavRelationship/>
                     </Col>
                     <Col>
 

@@ -34,6 +34,7 @@ router.get("/friend-request", async (req, res) => {
   try {
     const result = await User.findAll({
       where:{ id : 1},
+      attributes: [],
       include: [
         {
           model: User,
