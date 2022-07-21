@@ -47,9 +47,8 @@ export default function Login() {
                 path: '/',
                 maxAge: 60 * 60 * 24 * 7,
             });
-            console.log(JSON.parse(request.response).token);
         },
-        [email, password]
+        []
     );
 
     const reset = useCallback(

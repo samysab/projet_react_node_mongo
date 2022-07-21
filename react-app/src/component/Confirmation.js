@@ -27,7 +27,9 @@ export default function Login() {
         }else {
             setAlert(true);
         }
-    }, []);
+    },
+        []
+    );
 
     return (
         <Fragment>

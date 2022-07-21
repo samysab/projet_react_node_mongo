@@ -41,12 +41,11 @@ export default function Register() {
                     "technologies": selected
                 }));
                 setAlertSave(true);
-                // return request.responseText;
             }else {
                 setAlert(true);
             }
         },
-        [selected, email, password, confirmPassword, pseudo, alert]
+        []
     );
 
     return (
