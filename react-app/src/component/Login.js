@@ -48,7 +48,7 @@ export default function Login() {
                 maxAge: 60 * 60 * 24 * 7,
             });
         },
-        []
+        [email, password]
     );
 
     const reset = useCallback(

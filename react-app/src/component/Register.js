@@ -45,7 +45,7 @@ export default function Register() {
                 setAlert(true);
             }
         },
-        []
+        [selected, email, password, confirmPassword, pseudo, alert]
     );
 
     return (

@@ -16,6 +16,7 @@ export default function Reset() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [alert, setAlert] = useState(false);
     const [alertSave, setAlertSave] = useState(false);
+    const [alertError, setAlertError] = useState(false);
 
     const save = useCallback(
         () => {
@@ -23,14 +24,26 @@ export default function Reset() {
                 request.open("PUT", 'http://localhost:5000/resetPassword', false); //false for synchronous request
                 request.setRequestHeader("Content-type", "application/json");
                 request.send(JSON.stringify({
-                    "password": password
+                    "password": password,
+                    "token": params.id
                 }));
-                setAlertSave(true);
+
+                if (JSON.parse(request.response).success === true) {
+                    setAlertSave(true);
+                    setAlertError(false);
+                    setAlert(false);
+                }else {
+                    setAlertError(true);
+                    setAlertSave(false);
+                    setAlert(false);
+                }
             }else {
                 setAlert(true);
+                setAlertSave(false);
+                setAlertError(false);
             }
         },
-        []
+        [password, confirmPassword]
     );
 
     return (
@@ -41,6 +54,11 @@ export default function Reset() {
                         {alert ?
                             <Alert key="danger" variant="danger" className="mt-3">
                                 Les mots de passe ne correspondent pas
+                            </Alert> : ''
+                        }
+                        {alertError ?
+                            <Alert key="danger" variant="danger" className="mt-3">
+                                Le lien n'est pas valide.
                             </Alert> : ''
                         }
                         {alertSave ?
@@ -77,7 +95,7 @@ export default function Reset() {
                                     </div>
 
                                     <div className="d-flex justify-content-center align-items-center">
-                                        <Button variant="primary" onClick={save()}>Réinitialiser</Button>
+                                        <Button variant="primary" onClick={save}>Réinitialiser</Button>
                                     </div>
                                 </Card.Body>
                             </Card>
