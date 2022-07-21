@@ -37,6 +37,7 @@ router.post("/register", async (req, res) => {
       firstname: pseudo,
       status: 0,
       token: token,
+      technologies: JSON.stringify(req.body.technologies)
     });
 
     let url = 'http://localhost:3000/confirmation/'+token;

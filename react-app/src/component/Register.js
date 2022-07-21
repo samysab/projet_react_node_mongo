@@ -33,7 +33,6 @@ export default function Register() {
     const save = useCallback(
         () => {
             if (password === confirmPassword) {
-                console.log(selected);
                 request.open("POST", 'http://localhost:5000/register', false); //false for synchronous request
                 request.setRequestHeader("Content-type", "application/json");
                 request.send(JSON.stringify({
