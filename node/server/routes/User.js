@@ -30,6 +30,32 @@ router.post("/follow/:id", async (req, res) => {
   }
 });
 
+router.get("/friend-request", async (req, res) => {
+  try {
+    const result = await User.findAll({
+      where:{ id : 1},
+      include: [
+        {
+          model: User,
+          as: "follower",
+          required: false,
+          attributes: ["firstname","id"],
+          through: {
+            attributes: ["status"],
+            where: { status: 0 }
+          }
+        },
+      ],
+    });
+    res.json(result);
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
+  }
+});
+
+
+
 router.get("/friends", async (req, res) => {
   try {
     const result = await User.findAll({
