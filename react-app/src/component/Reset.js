@@ -58,7 +58,9 @@ export default function Reset() {
                         }
                         {alertError ?
                             <Alert key="danger" variant="danger" className="mt-3">
-                                Le lien n'est pas valide.
+                                Le mot de passe doit contenir au moins 6 caractères.
+                                <br/>
+                                Ou le lien de réinitialisation est expiré.
                             </Alert> : ''
                         }
                         {alertSave ?

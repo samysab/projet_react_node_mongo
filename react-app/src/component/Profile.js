@@ -33,11 +33,6 @@ export default function Profile() {
     const [alertError, setAlertError] = useState(false);
 
     useEffect(() => {
-            // request.open("GET", 'http://localhost:5000/users/profile', false); //false for synchronous request
-            // request.setRequestHeader("Content-type", "application/json");
-            // request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));
-            // request.send();
-
             setPseudo(auth.user.pseudo);
             setSelected(JSON.parse(auth.user.technologies));
         },
