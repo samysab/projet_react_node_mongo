@@ -46,6 +46,11 @@ export default function Register() {
                     setAlertSave(true);
                     setAlert(false);
                     setAlertShow(false);
+                    setEmail('');
+                    setPseudo('');
+                    setPassword('');
+                    setConfirmPassword('');
+                    setSelected([]);
                 }else if (JSON.parse(request.response).email) {
                     setAlert(false);
                     setAlertSave(false);

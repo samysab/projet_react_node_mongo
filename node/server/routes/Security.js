@@ -203,7 +203,12 @@ router.post("/login", async (req, res) => {
       return;
     }
     res.status(200);
-    res.json({ token: await createToken(result) });
+    res.json({
+      token: await createToken(result),
+      email: result.email,
+      pseudo: result.firstname,
+      technologies: result.technologies,
+    });
   } catch (error) {
     res.sendStatus(500);
     console.error(error);

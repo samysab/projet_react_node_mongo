@@ -31,7 +31,6 @@ export default function Profile() {
     const [alertError, setAlertError] = useState(false);
 
     useEffect(() => {
-            console.log(cookies.get('token'));
             request.open("GET", 'http://localhost:5000/users/profile', false); //false for synchronous request
             request.setRequestHeader("Content-type", "application/json");
             request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));

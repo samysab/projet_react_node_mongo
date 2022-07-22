@@ -43,6 +43,20 @@ router.get("/profile", async (req, res) => {
   }
 });
 
+router.get("/checkUser", async (req, res) => {
+  try {
+    res.status(200);
+    res.send({
+      pseudo: req.user.dataValues.pseudo,
+      email: req.user.dataValues.email,
+      technologies: req.user.dataValues.technologies
+    });
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
+  }
+});
+
 router.put("/resetPassword", async (req, res) => {
   try {
     const result = await User.update({

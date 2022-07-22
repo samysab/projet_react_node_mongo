@@ -11,14 +11,22 @@ import Reset from "./component/Reset";
 import Error404 from "./component/404";
 import { AuthProvider } from './component/auth';
 import { RequireAuth } from './component/RequireAuth';
+import { CheckAuth } from './component/CheckAuth';
 
 function App() {
   return (
       <AuthProvider>
           <Routes>
-            <Route path="/" element={<Login/>}/>
-            <Route path="/register" element={<Register/>}/>
-            {/*<Route path="/profile" element={<Profile/>}/>*/}
+            <Route path="/" element={
+                <CheckAuth>
+                    <Login />
+                </CheckAuth>
+            }/>
+            <Route path="/register" element={
+                <CheckAuth>
+                    <Register />
+                </CheckAuth>
+            }/>
             <Route path="/profile" element={
                 <RequireAuth>
                     <Profile />
