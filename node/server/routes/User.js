@@ -48,6 +48,39 @@ router.put("/friend-request/accept/:id", async (req, res) =>{
 
 });
 
+router.put("/friend-request/refuse/:id", async (req, res) =>{
+
+  try {
+
+    const result = await Relationship.update(
+      {
+        status: -1
+      },
+      {
+        where:{
+          id: parseInt(req.params.id, 10),
+        },
+        returning:true
+      }
+    )
+    if (!result) {
+      res.sendStatus(404);
+    } else {
+      res.json(result);
+    }
+    
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+
+});
+
+
 router.post("/follow", async (req, res) => {
   try {
     const result = await Relationship.create(req.body);
