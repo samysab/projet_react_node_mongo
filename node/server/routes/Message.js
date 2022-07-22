@@ -54,6 +54,24 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/getAllMessagesPerUser/:id", async (req, res) => {
+  try {
+    const result = await Message.findAll({
+      where: {
+        from: req.params.id,
+      }
+    });
+    if (!result) {
+      res.sendStatus(404);
+    } else {
+      res.json(result);
+    }
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+
 router.put("/changeStatus/:id", async (req, res) => {
   try {
     const result = await Message.update({
@@ -84,6 +102,24 @@ router.put("/changeStatus/:id", async (req, res) => {
       res.sendStatus(500);
       console.error(error);
     }
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const nbLines = await Message.destroy({
+      where: {
+        id: parseInt(req.params.id, 10),
+      },
+    });
+    if (!nbLines) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
   }
 });
 

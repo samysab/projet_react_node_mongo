@@ -18,6 +18,14 @@ Message.init(
       allowNull: false,
       defaultValue: true,
     },
+    from: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    to: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   {
     sequelize,

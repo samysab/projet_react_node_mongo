@@ -71,25 +71,41 @@ Content-Type: application/json
     "password": "OKOKOK"
 }
 
+
+
+
+
+
 ###
-GET http://localhost:3001/messages
+GET http://localhost:5000/messages
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU4MzM4MTczLCJleHAiOjE2ODk4OTU3NzN9.NmuWfiL7Gf4qdTuxpXhkaiNdsOJhZKvt5SsNyM5cu6E
 
 ###
-POST http://localhost:3001/messages
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU4MzM4MTczLCJleHAiOjE2ODk4OTU3NzN9.NmuWfiL7Gf4qdTuxpXhkaiNdsOJhZKvt5SsNyM5cu6E
-Content-Type: application/json
-
-{
-    "content": "Je suis le test AAA",
-    "userId": 1
-}
-
-###
-PUT http://localhost:3001/messages/changeStatus/2
+POST http://localhost:5000/messages
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU4MzM4MTczLCJleHAiOjE2ODk4OTU3NzN9.NmuWfiL7Gf4qdTuxpXhkaiNdsOJhZKvt5SsNyM5cu6E
 Content-Type: application/json
 
 {
-    "status": "0"
+    "content": "okokko",
+    "status": 0,
+    "from": 1,
+    "to": 2
 }
+
+###
+PUT http://localhost:5000/messages/changeStatus/9
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU4MzM4MTczLCJleHAiOjE2ODk4OTU3NzN9.NmuWfiL7Gf4qdTuxpXhkaiNdsOJhZKvt5SsNyM5cu6E
+Content-Type: application/json
+
+{
+    "status": 1
+}
+
+###
+GET http://localhost:5000/messages/getAllMessagesPerUser/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU4MzM4MTczLCJleHAiOjE2ODk4OTU3NzN9.NmuWfiL7Gf4qdTuxpXhkaiNdsOJhZKvt5SsNyM5cu6E
+
+###
+DELETE http://localhost:5000/messages/10
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU4MzM4MTczLCJleHAiOjE2ODk4OTU3NzN9.NmuWfiL7Gf4qdTuxpXhkaiNdsOJhZKvt5SsNyM5cu6E
+
