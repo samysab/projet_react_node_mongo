@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 import {Link} from "react-router-dom";
 import { MultiSelect } from "react-multi-select-component";
 import Cookies from 'universal-cookie';
+import Alert from "react-bootstrap/Alert";
 
 const options = [
     { label: "JavaScript", value: "JavaScript" },
@@ -25,6 +26,9 @@ export default function Profile() {
     const [pseudo, setPseudo] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [alert, setAlert] = useState(false);
+    const [alertReset, setAlertReset] = useState(false);
+    const [alertError, setAlertError] = useState(false);
 
     useEffect(() => {
             console.log(cookies.get('token'));
@@ -48,6 +52,16 @@ export default function Profile() {
                 "pseudo": pseudo,
                 "technologies": selected
             }));
+
+            if (JSON.parse(request.response).success === true) {
+                setAlertReset(false);
+                setAlertError(false);
+                setAlert(true);
+            }else {
+                setAlertError('Le pseudo doit contenir au moins 2 caractères');
+                setAlertReset(false);
+                setAlert(false);
+            }
         },
         [pseudo, selected]
     );
@@ -62,19 +76,19 @@ export default function Profile() {
                     "password": password,
                 }));
 
-                // if (JSON.parse(request.response).success === true) {
-                //     setAlertSave(true);
-                //     setAlertError(false);
-                //     setAlert(false);
-                // }else {
-                //     setAlertError(true);
-                //     setAlertSave(false);
-                //     setAlert(false);
-                // }
+                if (JSON.parse(request.response).success === true) {
+                    setAlertReset(true);
+                    setAlertError(false);
+                    setAlert(false);
+                }else {
+                    setAlertError('Le mot de passe doit contenir au moins 6 caractères');
+                    setAlertReset(false);
+                    setAlert(false);
+                }
             }else {
-                // setAlert(true);
-                // setAlertSave(false);
-                // setAlertError(false);
+                setAlert(false);
+                setAlertReset(false);
+                setAlertError('Les mots de passe ne correspondent pas');
             }
         },
         [password, confirmPassword]
@@ -85,6 +99,21 @@ export default function Profile() {
             <Container>
                 <Row>
                     <Col>
+                        {alert ?
+                            <Alert key="success" variant="success" className="mt-3">
+                                Votre profil a bien été mis à jour
+                            </Alert> : ''
+                        }
+                        {alertError ?
+                            <Alert key="danger" variant="danger" className="mt-3">
+                                {alertError}
+                            </Alert> : ''
+                        }
+                        {alertReset ?
+                            <Alert key="success" variant="success" className="mt-3">
+                                Votre mot de passe a été changé
+                            </Alert> : ''
+                        }
                         <div className={"d-flex justify-content-center mt-5"}>
                             <Card body style={{ width: '100%' }}>
                                 <h1>Profile</h1>
