@@ -24,6 +24,21 @@ export default function FriendRequest() {
 
     }, []);
 
+    const accept = useCallback ( (id) =>{
+
+        const request = new XMLHttpRequest();
+        request.open( "PUT", `http://localhost:5000/users/friend-request/accept/${id}`, false ); 
+        request.setRequestHeader("Content-type", "application/json");
+        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.send();
+
+        let newFriendsRequest = friendsRequest.slice();
+        let index = newFriendsRequest.findIndex(user => user.relationship.id == id);
+        newFriendsRequest.splice(index,1);
+ 
+        setFriendsRequest(newFriendsRequest);
+
+    },[friendsRequest]);
    
 
     return (
@@ -49,7 +64,7 @@ export default function FriendRequest() {
                                             <tr key={user.id}>
                                                 <td>{user.firstname}</td>
                                                 <td>
-                                                    <Button size="sm">Accepter</Button>
+                                                    <Button size="sm" onClick={ () => accept(user.relationship.id)}>Accepter</Button>
                                                     <Button className="btn-danger mx-2" size="sm">Refuser</Button>
                                                 </td>
                                             </tr>

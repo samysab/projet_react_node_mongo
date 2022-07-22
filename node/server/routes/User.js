@@ -107,7 +107,7 @@ router.get("/friend-request", async (req, res) => {
           required: false,
           attributes: ["firstname","id"],
           through: {
-            attributes: ["status"],
+            attributes: ["status","id"],
             where: { status: 0 }
           }
         },
