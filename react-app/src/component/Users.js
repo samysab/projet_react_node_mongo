@@ -3,55 +3,53 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import NavRelationship from './NavRelationship';
+import Table from 'react-bootstrap/Table';
+import { Link } from "react-router-dom";
 
 
 
 export default function Users() {
 
     const [users, setUsers] = useState([]);
-    const [followers, setFollowers] = useState([]);
+    const [value, setValue] = useState("");
+    
    
 
     useEffect(() => {
 
-        const request = new XMLHttpRequest();
-        request.onreadystatechange = function() {
-            if (request.readyState == XMLHttpRequest.DONE) {
-                setUsers(JSON.parse(request.responseText));
-               
-            }
-        }
-        request.open( "GET", 'http://localhost:5000/users/users', false );
-        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
-        request.send();
-
-    }, [followers]);
-
-
-    const follow = useCallback(
-        (user) => {
-
+        if (value == ""){
             const request = new XMLHttpRequest();
-            request.open( "POST", `http://localhost:5000/users/follow`, false ); 
+            request.onreadystatechange = function() {
+                if (request.readyState == XMLHttpRequest.DONE) {
+                    setUsers(JSON.parse(request.responseText));
+                
+                }
+            }
+            request.open( "GET", 'http://localhost:5000/users/users', false );
+            request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+            request.send();
+        }else{
+            const request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+                if (request.readyState == XMLHttpRequest.DONE) {
+                    setUsers(JSON.parse(request.responseText));
+                }
+            }
+            request.open( "GET", `http://localhost:5000/users/search/${value}`, false ); 
             request.setRequestHeader("Content-type", "application/json");
             request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
-            request.send(JSON.stringify({
-                "follower": 1,
-                "following": user.id,
-                "status": 0,
-               
-            }));
+            request.send();
+        }
+        
 
-            let newFollowers = followers.slice();
-            newFollowers.push(user);
-            setFollowers(newFollowers);
-        },
-        [followers]
-    );
+    }, [value]);
+
+    const search = useCallback( (event) => {
+        setValue(event.target.value);
+    },[value])
 
     return (
         <Fragment>
@@ -62,17 +60,40 @@ export default function Users() {
                     </Col>
                     <Col>
 
-                    {
-                        users.map( user => {
-                            return (
-                            <div className="d-flex mt-2" key={user.id}> 
-                                <span>{user.firstname}</span>
-                                <Button className="mx-2" size="sm" onClick={ () => follow(user)}>Follow</Button>
-                            </div>
-                          
-                            );
-                        })
-                    }
+                    <InputGroup className="mb-3">
+                        <Form.Control
+                        placeholder="Nom, email"
+                        onChange = {search}
+                        />
+                    </InputGroup>
+
+                    <Table striped bordered hover>
+                            <thead>
+                                <tr>
+                                <th>Nom</th>
+                                <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                users.map( user => {
+                                    return (
+                                    <tr key={user.id}>
+                                        <td>
+                                            <p>{user.firstname}</p>
+                                            <p>{user.following.id}</p>
+                                        </td>
+                                        <td>
+                                            <Button size="sm">Voir le profile</Button>
+                                            <Link to={'/users/user/1'}></Link>
+                                        </td>
+                                    </tr> 
+                                
+                                    );
+                                })
+                            }
+                            </tbody>
+                        </Table>
                     </Col>
                 </Row>
             </Container>
