@@ -1,10 +1,14 @@
 exports.sequelize = require("./db");
 exports.User = require("./User");
 exports.Post = require("./Post");
+exports.Message = require("./Message");
 const { Post: PostMongo } = require("../mongo");
 
 exports.User.hasMany(exports.Post);
 exports.Post.belongsTo(exports.User);
+
+exports.Message.belongsTo(exports.User, {through: exports.Message, foreignKey: "from" });
+exports.Message.belongsTo(exports.User, {through: exports.Message, foreignKey: "to" });
 
 async function denormalizePost(post) {
   await PostMongo.deleteOne({ _id: post.id });
