@@ -36,7 +36,7 @@ export default function Users() {
         (user) => {
 
             const request = new XMLHttpRequest();
-            request.open( "POST", `http://localhost:5000/users/follow/${user.id}`, false ); 
+            request.open( "POST", `http://localhost:5000/users/follow`, false ); 
             request.setRequestHeader("Content-type", "application/json");
             request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
             request.send(JSON.stringify({
