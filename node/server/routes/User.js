@@ -30,6 +30,94 @@ router.get("/", checkIsAdmin, async (req, res) => {
   }
 });
 
+router.get("/profile", async (req, res) => {
+  try {
+    res.status(200);
+    res.send({
+      pseudo: req.user.dataValues.firstname,
+      technologies: req.user.dataValues.technologies
+    });
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
+  }
+});
+
+router.put("/resetPassword", async (req, res) => {
+  try {
+    const result = await User.update({
+      password: req.body.password
+    }, {
+      where: {
+        id: req.user.dataValues.id,
+      },
+      individualHooks: true,
+    });
+
+    if (result[0] === 0) {
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Error',
+      });
+    }else {
+      res.status(200);
+      res.send({
+        success: true,
+        message: 'Success'
+      });
+    }
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+});
+
+router.put("/updateProfile", async (req, res) => {
+  const pseudo = req.body.pseudo.trim();
+
+  try {
+    console.log(req.body.pseudo);
+    console.log(req.body.technologies);
+
+    const result = await User.update({
+      firstname: pseudo,
+      technologies: JSON.stringify(req.body.technologies)
+    }, {
+      where: {
+        id: req.user.dataValues.id,
+      },
+    });
+
+    console.log(result);
+
+    if (result[0] === 0) {
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Error',
+      });
+    }else {
+      res.status(200);
+      res.send({
+        success: true,
+        message: 'Success'
+      });
+    }
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+});
+
 router.post("/", checkIsAdmin, async (req, res) => {
   try {
     const result = await User.create(req.body);
