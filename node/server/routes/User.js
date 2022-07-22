@@ -48,6 +48,49 @@ router.put("/friend-request/accept/:id", async (req, res) =>{
 
 });
 
+router.get("/search/:word", async (req, res) =>{
+  try {
+    
+    const result = await User.findAll({
+      where: {
+        id: {
+          [Op.ne]: 1
+        },
+
+        [Op.or]: [
+          {
+            firstname: {
+              [Op.like]: req.params.word + "%",
+            }
+          },
+          {
+            email: {
+              [Op.like]: req.params.word + "%",
+            }
+          }
+        ]
+
+      },
+      include: [
+        {
+          model: User,
+          as: "following",
+          required: false,
+          attributes: ["firstname","id"],
+          through: {
+            attributes: ["status"],
+            where: { status: 1 }
+          }
+        },
+      ],
+    });
+    res.json(result);
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
+  }
+});
+
 router.put("/friend-request/refuse/:id", async (req, res) =>{
 
   try {
