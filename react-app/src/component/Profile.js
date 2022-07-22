@@ -41,9 +41,15 @@ export default function Profile() {
 
     const update = useCallback(
         () => {
-
+            request.open("PUT", 'http://localhost:5000/users/updateProfile', false); //false for synchronous request
+            request.setRequestHeader("Content-type", "application/json");
+            request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));
+            request.send(JSON.stringify({
+                "pseudo": pseudo,
+                "technologies": selected
+            }));
         },
-        []
+        [pseudo, selected]
     );
 
     const updatePassword = useCallback(
@@ -91,7 +97,7 @@ export default function Profile() {
                                             <input
                                                 type="text"
                                                 value={pseudo}
-                                                onChange={(e) => {setPassword(e.target.value)}}
+                                                onChange={(e) => {setPseudo(e.target.value)}}
                                                 className="form-control"
                                                 placeholder="Pseudo"
                                                 aria-label="Pseudo"
