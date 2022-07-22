@@ -8,7 +8,9 @@ export default function NavRelationship(){
         <Fragment>
              <ListGroup>
                 <ListGroup.Item>Suggestions</ListGroup.Item>
-                <ListGroup.Item>Mes amies</ListGroup.Item>
+                <ListGroup.Item>
+                    <Link to={'/users/friends'}>Mes amies</Link>
+                </ListGroup.Item>
                 <ListGroup.Item>
                     <Link to={'/users/friend-request'}>Mes demandes en attente</Link>
                 </ListGroup.Item>

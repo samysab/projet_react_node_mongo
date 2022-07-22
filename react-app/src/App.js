@@ -9,6 +9,7 @@ import Profile from "./component/Profile";
 import Users from "./component/Users";
 
 import FriendRequest from "./component/FriendRequest";
+import Friends from './component/Friends';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
 
         <Route path="/users" element={<Users/>}/>
         <Route path="/users/friend-request" element={<FriendRequest/>}/>
+        <Route path="/users/friends" element={<Friends/>}/>
       </Routes>
   );
 }
