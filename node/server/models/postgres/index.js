@@ -10,6 +10,10 @@ exports.Post.belongsTo(exports.User);
 exports.User.hasMany(exports.Message);
 exports.Message.belongsTo(exports.User);
 
+
+exports.User.hasMany(exports.Message);
+exports.Message.belongsTo(exports.User);
+
 async function denormalizePost(post) {
   await PostMongo.deleteOne({ _id: post.id });
   await PostMongo.create(

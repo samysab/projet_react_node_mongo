@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const result = await Post.findByPk(parseInt(req.params.id, 10));
+    const result = await Message.findByPk(parseInt(req.params.id, 10));
     if (!result) {
       res.sendStatus(404);
     } else {
@@ -54,46 +54,36 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/changeStatus/:id", async (req, res) => {
   try {
-    const [nbLines, [result]] = await Post.update(req.body, {
+    const result = await Message.update({
+      status: req.body.status
+    }, {
       where: {
-        id: parseInt(req.params.id, 10),
+        id: req.params.id,
       },
-      returning: true,
     });
-    if (!nbLines) {
-      res.sendStatus(404);
-    } else {
-      res.json(result);
+
+    if (result[0] === 0) {
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Error',
+      });
+    }else {
+      res.status(200);
+      res.send({
+        success: true,
+        message: 'Success'
+      });
     }
   } catch (error) {
-    console.log(error);
-
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
     } else {
       res.sendStatus(500);
       console.error(error);
     }
-  }
-});
-
-router.delete("/:id", async (req, res) => {
-  try {
-    const nbLines = await Post.destroy({
-      where: {
-        id: parseInt(req.params.id, 10),
-      },
-    });
-    if (!nbLines) {
-      res.sendStatus(404);
-    } else {
-      res.sendStatus(204);
-    }
-  } catch (error) {
-    res.sendStatus(500);
-    console.error(error);
   }
 });
 

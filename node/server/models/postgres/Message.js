@@ -13,6 +13,11 @@ Message.init(
         notEmpty: true,
       },
     },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
   },
   {
     sequelize,

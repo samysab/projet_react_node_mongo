@@ -24,7 +24,7 @@ Content-Type: application/json
 DELETE http://localhost:3000/http-codes/62b989c6b1d4a19ea9b679bd
 
 ###
-GET http://localhost:3000/users
+GET http://localhost:3001/users
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU4MzM4MTczLCJleHAiOjE2ODk4OTU3NzN9.NmuWfiL7Gf4qdTuxpXhkaiNdsOJhZKvt5SsNyM5cu6E
 
 ###
@@ -41,7 +41,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:3000/users/2
+PUT http://localhost:3001/users/2
 Content-Type: application/json
 
 {
@@ -72,15 +72,24 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/messages
+GET http://localhost:3001/messages
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU4MzM4MTczLCJleHAiOjE2ODk4OTU3NzN9.NmuWfiL7Gf4qdTuxpXhkaiNdsOJhZKvt5SsNyM5cu6E
 
 ###
-POST http://localhost:3000/messages
+POST http://localhost:3001/messages
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU4MzM4MTczLCJleHAiOjE2ODk4OTU3NzN9.NmuWfiL7Gf4qdTuxpXhkaiNdsOJhZKvt5SsNyM5cu6E
 Content-Type: application/json
 
 {
-    "content": "Je suis le test",
+    "content": "Je suis le test AAA",
     "userId": 1
+}
+
+###
+PUT http://localhost:3001/messages/changeStatus/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU4MzM4MTczLCJleHAiOjE2ODk4OTU3NzN9.NmuWfiL7Gf4qdTuxpXhkaiNdsOJhZKvt5SsNyM5cu6E
+Content-Type: application/json
+
+{
+    "status": "0"
 }
