@@ -29,7 +29,7 @@ export default function Login() {
 
     const login = useCallback(
         () => {
-            request.open("POST", 'http://localhost:5000/login', false); //false for synchronous request
+            request.open("POST", 'http://localhost:5000/login', false);
             request.setRequestHeader("Content-type", "application/json");
             request.send(JSON.stringify({
                 "email": email,

@@ -11,15 +11,19 @@ export const AuthProvider = ({ children }) => {
     const cookies = new Cookies();
 
     useEffect(() => {
-            request.open("GET", 'http://localhost:5000/users/checkUser', false); //false for synchronous request
-            request.setRequestHeader("Content-type", "application/json");
-            request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));
-            request.send();
 
-            if (request.response !== 'Unauthorized') {
-                console.log(JSON.parse(request.response));
-                login(JSON.parse(request.response));
+            const check = async () => {
+                request.open("GET", 'http://localhost:5000/users/checkUser', false);
+                request.setRequestHeader("Content-type", "application/json");
+                request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));
+                request.send();
+
+                if (request.response !== 'Unauthorized') {
+                    login(JSON.parse(request.response));
+                }
             }
+
+            check()
         }, []
     );
 

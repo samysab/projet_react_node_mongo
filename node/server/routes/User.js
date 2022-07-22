@@ -30,24 +30,11 @@ router.get("/", checkIsAdmin, async (req, res) => {
   }
 });
 
-router.get("/profile", async (req, res) => {
-  try {
-    res.status(200);
-    res.send({
-      pseudo: req.user.dataValues.firstname,
-      technologies: req.user.dataValues.technologies
-    });
-  } catch (error) {
-    res.sendStatus(500);
-    console.error(error);
-  }
-});
-
 router.get("/checkUser", async (req, res) => {
   try {
     res.status(200);
     res.send({
-      pseudo: req.user.dataValues.pseudo,
+      pseudo: req.user.dataValues.firstname,
       email: req.user.dataValues.email,
       technologies: req.user.dataValues.technologies
     });
