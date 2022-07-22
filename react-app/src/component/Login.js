@@ -15,7 +15,7 @@ const request = new XMLHttpRequest();
 
 export default function Login() {
     const auth = useAuth();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
     const [emailReset, setEmailReset] = useState('');
@@ -51,7 +51,7 @@ export default function Login() {
                 maxAge: 60 * 60 * 24 * 7,
             });
 
-            auth.login(JSON.parse(request.response).token);
+            auth.login(JSON.parse(request.response));
             navigate("/profile", { replace: false });
         },
         [email, password]

@@ -9,6 +9,7 @@ import Profile from "./component/Profile";
 import Confirmation from "./component/Confirmation";
 import Reset from "./component/Reset";
 import Error404 from "./component/404";
+import Menu from "./component/Menu";
 import { AuthProvider } from './component/auth';
 import { RequireAuth } from './component/RequireAuth';
 import { CheckAuth } from './component/CheckAuth';
@@ -16,6 +17,7 @@ import { CheckAuth } from './component/CheckAuth';
 function App() {
   return (
       <AuthProvider>
+          <Menu />
           <Routes>
             <Route path="/" element={
                 <CheckAuth>

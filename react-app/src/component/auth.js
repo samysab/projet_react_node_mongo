@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         setUser(null);
+        cookies.remove('token');
     }
 
     return (
