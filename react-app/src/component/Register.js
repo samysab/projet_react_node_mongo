@@ -56,6 +56,11 @@ export default function Register() {
                     setAlertSave(false);
                     setAlertMessage('Le mot de passe doit contenir au moins 6 caractères');
                     setAlertShow(true);
+                } else {
+                    setAlert(false);
+                    setAlertSave(false);
+                    setAlertMessage('Le pseudo doit contenir au moins 2 caractères');
+                    setAlertShow(true);
                 }
             }else {
                 setAlert(true);
