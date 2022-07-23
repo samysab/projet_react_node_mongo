@@ -4,10 +4,11 @@ import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import {Link} from "react-router-dom";
 import { MultiSelect } from "react-multi-select-component";
 import Cookies from 'universal-cookie';
 import Alert from "react-bootstrap/Alert";
+import { useAuth } from './auth';
+
 
 const options = [
     { label: "JavaScript", value: "JavaScript" },
@@ -21,6 +22,7 @@ const request = new XMLHttpRequest();
 export default function Profile() {
 
     const cookies = new Cookies();
+    const auth = useAuth()
 
     const [selected, setSelected] = useState([]);
     const [pseudo, setPseudo] = useState('');
@@ -31,14 +33,8 @@ export default function Profile() {
     const [alertError, setAlertError] = useState(false);
 
     useEffect(() => {
-            console.log(cookies.get('token'));
-            request.open("GET", 'http://localhost:5000/users/profile', false); //false for synchronous request
-            request.setRequestHeader("Content-type", "application/json");
-            request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));
-            request.send();
-
-            setPseudo(JSON.parse(request.response).pseudo);
-            setSelected(JSON.parse(JSON.parse(request.response).technologies));
+            setPseudo(auth.user.pseudo);
+            setSelected(JSON.parse(auth.user.technologies));
         },
         []
     );

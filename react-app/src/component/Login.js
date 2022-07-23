@@ -6,13 +6,16 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import Modal from 'react-bootstrap/Modal';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
+import { useAuth } from './auth';
 
 
 const request = new XMLHttpRequest();
 
 export default function Login() {
+    const auth = useAuth();
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
     const [emailReset, setEmailReset] = useState('');
@@ -26,7 +29,7 @@ export default function Login() {
 
     const login = useCallback(
         () => {
-            request.open("POST", 'http://localhost:5000/login', false); //false for synchronous request
+            request.open("POST", 'http://localhost:5000/login', false);
             request.setRequestHeader("Content-type", "application/json");
             request.send(JSON.stringify({
                 "email": email,
@@ -47,6 +50,9 @@ export default function Login() {
                 path: '/',
                 maxAge: 60 * 60 * 24 * 7,
             });
+
+            auth.login(JSON.parse(request.response));
+            navigate("/profile", { replace: false });
         },
         [email, password]
     );
