@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import Login from "./component/Login";
 import Register from "./component/Register";
+import Message from "./component/Messages";
 import Profile from "./component/Profile";
 import Confirmation from "./component/Confirmation";
 import Reset from "./component/Reset";
@@ -34,11 +35,7 @@ function App() {
                     <Profile />
                 </RequireAuth>
             }/>
-            <Route path="/messages"  element={
-                <RequireAuth>
-                    <Message />
-                </RequireAuth>
-            }/>
+            <Route path="/messages"  element={<Message />}/>
             <Route path="/confirmation">
                 <Route path=":id" element={<Confirmation />} />
             </Route>

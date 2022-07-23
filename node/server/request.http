@@ -83,7 +83,7 @@ Content-Type: application/json
 {
     "content": "okokko",
     "status": 0,
-    "from": 1,
+    "from": "1",
     "to": 2
 }
 
