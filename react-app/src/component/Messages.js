@@ -68,6 +68,12 @@ useEffect(() => {
                   </Col>
                   <Col id="test">
                       <div>
+                        {/* A FAIRE - VERFI 
+                          IF user connected == from or to
+                          OR
+                          value == from or to
+                        */}
+                        
                       {
                         messages.map( message => {
                             return (
