@@ -2,10 +2,14 @@ exports.sequelize = require("./db");
 exports.User = require("./User");
 exports.Post = require("./Post");
 exports.Message = require("./Message");
+exports.Report = require("./Report")
 const { Post: PostMongo } = require("../mongo");
 
 exports.User.hasMany(exports.Post);
 exports.Post.belongsTo(exports.User);
+
+exports.User.hasMany(exports.Report);
+exports.Report.belongsTo(exports.User);
 
 exports.Message.belongsTo(exports.User, {through: exports.Message, foreignKey: "from" });
 exports.Message.belongsTo(exports.User, {through: exports.Message, foreignKey: "to" });
