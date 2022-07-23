@@ -64,7 +64,8 @@ router.get("/getAllMessagesPerUser/:id", async (req, res) => {
           { from: req.params.id },
           { to: req.params.id }
         ]
-      }
+      },
+      order: [["id", "ASC"]]
     });
     if (!result) {
       res.sendStatus(404);
@@ -81,7 +82,7 @@ router.get("/getAllMessagesPerUser/:id", async (req, res) => {
 router.put("/changeStatus/:id", async (req, res) => {
   try {
     const result = await Message.update({
-      status: req.body.status
+      status: 0
     }, {
       where: {
         id: req.params.id,

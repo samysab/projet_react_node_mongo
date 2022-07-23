@@ -112,8 +112,9 @@ p[class^="from-"].emoji::before {
   margin-top: 1rem !important;
 }
 
-
-
+.msg-deleted{
+  font-style: italic;
+}
 
 
 

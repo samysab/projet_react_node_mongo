@@ -1,13 +1,12 @@
-import React, { Fragment, useEffect, useState, useRef } from "react";
-import Container from 'react-bootstrap/Container';
+import React, { Fragment, useEffect, useState, useRef, useCallback } from "react";
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Cookies from 'universal-cookie';
 import Button from 'react-bootstrap/Button';
 import { useAuth } from './auth';
 import Alert from 'react-bootstrap/Alert';
 import './css/conversation.css';
 var moment = require('moment'); // require
+
 
 const request = new XMLHttpRequest();
 
@@ -50,6 +49,27 @@ export function Conversation({ to, messages }) {
       }
     }
   }
+  const [idMessage, setIdMessage] = useState("");
+  const [deleted, setDeleted] = useState(false);
+
+  useEffect(
+    () => {
+      console.log("ok " + idMessage);
+      request.open("PUT", 'http://localhost:5000/messages/changeStatus/'+idMessage, false); //false for synchronous request
+      request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
+      request.setRequestHeader("Content-type", "application/json");
+      request.send(JSON.stringify({}));
+
+      console.log(request.response);
+      if (request.response === true) {
+          console.log("ko");
+      } else {
+        console.log("ok");
+        setDeleted(idMessage)
+      }
+    },
+    [idMessage]
+  );
 
   return (
     <Fragment>
@@ -59,10 +79,15 @@ export function Conversation({ to, messages }) {
             if ((to == message.from || to == message.to) && (auth.user.id == message.from || auth.user.id == message.to)) {
               return (
                 <Fragment>
-                <p key={message.id} className={(message.from == auth.user.id ? "from-me" : "from-them")}>
-                  {message.content}
-                  <br/><small style={{fontSize:"15px"}} className={(message.from == auth.user.id ? "from-me" : "from-them")}>{moment(message.updatedAt).format('DD/MM/YYYY hh:mm:ss') }</small>
-                </p>
+                  <p key={message.id} className={(message.from == auth.user.id ? "from-me" : "from-them")}>
+                    {(!message.status || idMessage == message.id ? "/!\\ Ce message a été supprimer" : message.content)}
+
+                    {(!message.status || idMessage == message.id ? "" : <Button onClick={() => setIdMessage(message.id)}>Supprimer</Button>)}
+                   
+
+
+                    <br /><small style={{ fontSize: "15px" }} className={(message.from == auth.user.id ? "from-me" : "from-them")}>{moment(message.updatedAt).format('DD/MM/YYYY hh:mm:ss')}</small>
+                  </p>
                 </Fragment>
               );
             }
