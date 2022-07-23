@@ -9,6 +9,7 @@ import Profile from "./component/Profile";
 import Confirmation from "./component/Confirmation";
 import Reset from "./component/Reset";
 import Error404 from "./component/404";
+import Messages from "./component/Messages";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/profile" element={<Profile/>}/>
+        <Route path="/messages" element={<Messages/>}/>
         <Route path="/confirmation">
             <Route path=":id" element={<Confirmation />} />
         </Route>

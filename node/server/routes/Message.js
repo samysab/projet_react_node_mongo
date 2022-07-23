@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { Message } = require("../models/postgres");
-const { ValidationError } = require("sequelize");
+const { ValidationError, Op } = require("sequelize");
 
 const router = new Router();
 
@@ -17,7 +17,9 @@ router.get("/", async (req, res) => {
     const result = await Message.findAll({
       where: criteria,
       limit: perPage,
-      offset: (page - 1) * perPage,
+      attributes: ["from"],
+      group: "from",
+      offset: (page - 1) * perPage
     });
     res.json(result);
   } catch (error) {
@@ -58,7 +60,10 @@ router.get("/getAllMessagesPerUser/:id", async (req, res) => {
   try {
     const result = await Message.findAll({
       where: {
-        from: req.params.id,
+        [Op.or]: [
+          { from: req.params.id },
+          { to: req.params.id }
+        ]
       }
     });
     if (!result) {
@@ -71,6 +76,7 @@ router.get("/getAllMessagesPerUser/:id", async (req, res) => {
     res.sendStatus(500);
   }
 });
+
 
 router.put("/changeStatus/:id", async (req, res) => {
   try {
