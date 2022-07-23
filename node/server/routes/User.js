@@ -287,6 +287,26 @@ router.get("/user/follower/:id", async (req, res) => {
 });
 
 
+router.delete("/unfollow/:id", async (req, res) => {
+  try {
+    const nbLines = await Relationship.destroy({
+      where: {
+        id: parseInt(req.params.id, 10),
+      },
+    });
+    if (!nbLines) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
+  }
+});
+
+
+
 
 router.get("/", checkIsAdmin, async (req, res) => {
   try {
