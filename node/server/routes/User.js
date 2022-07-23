@@ -217,6 +217,77 @@ router.get("/users", async (req, res) => {
   }
 });
 
+router.get("/user/following/:id", async (req, res) => {
+  try {
+  
+    const result = await User.findAll({
+      where: {
+        id: parseInt(req.params.id)
+      },
+      include: [
+        {
+          model: User,
+          as: "following",
+          required: false,
+          attributes: ["firstname","id"],
+          where:{
+              id:1
+          },
+          through: {
+            attributes: ["status","id"],
+            where: {
+              status: {
+                [Op.ne]: -1
+              }
+            },
+            
+          }
+        },
+      ],
+    });
+    res.json(result);
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
+  }
+});
+
+router.get("/user/follower/:id", async (req, res) => {
+  try {
+  
+    const result = await User.findAll({
+      where: {
+        id: parseInt(req.params.id)
+      },
+      include: [
+        {
+          model: User,
+          as: "follower",
+          required: false,
+          attributes: ["firstname","id"],
+          where: {
+            id:1,
+          },
+          through: {
+            attributes: ["status","id"],
+            where: {
+              status: {
+                [Op.ne]: -1
+              }
+            },
+          }
+        },
+      ],
+    });
+    res.json(result);
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
+  }
+});
+
+
+
 router.get("/", checkIsAdmin, async (req, res) => {
   try {
     const { page = 1, perPage = 10, ...criteria } = req.query;
