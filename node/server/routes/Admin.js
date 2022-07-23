@@ -10,7 +10,17 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/show-user/:id", async (req, res) => {
-    res.send(":id");
+    try {
+        const result = await User.findByPk(parseInt(req.params.id, 10));
+        if (!result) {
+            res.sendStatus(404);
+        } else {
+            res.json(result);
+        }
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
 });
 
 router.get("/edit-user/:id", async (req, res) => {
