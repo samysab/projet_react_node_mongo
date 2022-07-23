@@ -23,7 +23,6 @@ export default function Friends() {
 
     }, []);
 
-    console.log(friends);
     return (
         <Fragment>
             <Container>
@@ -48,7 +47,7 @@ export default function Friends() {
                                             <tr key={user.id}>
                                                 <td>{user.firstname}</td>
                                                 <td>
-                                                    <Button size="sm" className="btn-danger">Supprimer</Button>
+                                                    <Button size="sm" className="btn-danger">Signaler</Button>
                                                 </td>
                                             </tr>
 

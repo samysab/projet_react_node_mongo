@@ -86,15 +86,31 @@ export default function User() {
 
 
     },[user]);
+
+    const unfollow = useCallback( (rFollowerId, rFollowingId) => {
+
+        const request = new XMLHttpRequest();
+        request.open( "DELETE", `http://localhost:5000/users/unfollow/${rFollowerId}`, false ); 
+        request.setRequestHeader("Content-type", "application/json");
+        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.send();
+
+        request.open( "DELETE", `http://localhost:5000/users/unfollow/${rFollowingId}`, false ); 
+        request.setRequestHeader("Content-type", "application/json");
+        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.send();
+
+        setAction("UNFOLLOW");
+
+    },[]);
     
     const FollowOrUnfollow = useCallback( () => {
-
-      
+ 
         if ( following[0]?.following[0]?.relationship.status == 1 ||
              follower[0]?.follower[0]?.relationship.status == 1
         ){
             return (
-                <Button className="btn btn-danger btn-sm">Ne plus suivre</Button>
+                <Button className="btn btn-danger btn-sm" onClick={ () => unfollow(following[0]?.following[0]?.relationship.id, follower[0]?.follower[0]?.relationship.id )}>Ne plus suivre</Button>
             );
         }
         if (following[0]?.following[0]?.relationship.status == 0){
