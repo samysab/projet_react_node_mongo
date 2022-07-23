@@ -81,11 +81,10 @@ export default function Users() {
                                     <tr key={user.id}>
                                         <td>
                                             <p>{user.firstname}</p>
-                                            <p>{user.following.id}</p>
+                                            <p>{user.email}</p>
                                         </td>
                                         <td>
-                                            <Button size="sm">Voir le profile</Button>
-                                            <Link to={'/users/user/1'}></Link>
+                                            <Link className="btn btn-primary" to={`/users/user/${user.id}`}>Voir le profile</Link>
                                         </td>
                                     </tr> 
                                 

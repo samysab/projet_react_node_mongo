@@ -10,6 +10,7 @@ import Users from "./component/Users";
 
 import FriendRequest from "./component/FriendRequest";
 import Friends from './component/Friends';
+import User from './component/User';
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
         <Route path="/register" element={<Register/>}/>
         <Route path="/profile" element={<Profile/>}/>
 
-        <Route path="/users" element={<Users/>}/>
+        <Route path="/users/users" element={<Users/>}/>
+        <Route path="/users/user/:id" element={<User/>} />
         <Route path="/users/friend-request" element={<FriendRequest/>}/>
         <Route path="/users/friends" element={<Friends/>}/>
       </Routes>
