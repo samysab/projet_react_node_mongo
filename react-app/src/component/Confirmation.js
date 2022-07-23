@@ -15,8 +15,7 @@ export default function Login() {
     const [alert, setAlert] = useState(false);
 
     useEffect(() => {
-        console.log('test');
-        request.open("PUT", 'http://localhost:5000/confirmation', false); //false for synchronous request
+        request.open("PUT", 'http://localhost:5000/confirmation', false);
         request.setRequestHeader("Content-type", "application/json");
         request.send(JSON.stringify({
             "token": params.id,

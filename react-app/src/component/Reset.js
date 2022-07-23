@@ -21,7 +21,7 @@ export default function Reset() {
     const save = useCallback(
         () => {
             if (password === confirmPassword) {
-                request.open("PUT", 'http://localhost:5000/resetPassword', false); //false for synchronous request
+                request.open("PUT", 'http://localhost:5000/resetPassword', false);
                 request.setRequestHeader("Content-type", "application/json");
                 request.send(JSON.stringify({
                     "password": password,
@@ -58,7 +58,9 @@ export default function Reset() {
                         }
                         {alertError ?
                             <Alert key="danger" variant="danger" className="mt-3">
-                                Le lien n'est pas valide.
+                                Le mot de passe doit contenir au moins 6 caractères.
+                                <br/>
+                                Ou le lien de réinitialisation est expiré.
                             </Alert> : ''
                         }
                         {alertSave ?

@@ -33,8 +33,7 @@ export default function Register() {
     const save = useCallback(
         () => {
             if (password === confirmPassword) {
-                console.log(selected);
-                request.open("POST", 'http://localhost:5000/register', false); //false for synchronous request
+                request.open("POST", 'http://localhost:5000/register', false);
                 request.setRequestHeader("Content-type", "application/json");
                 request.send(JSON.stringify({
                     "email": email,
@@ -47,6 +46,11 @@ export default function Register() {
                     setAlertSave(true);
                     setAlert(false);
                     setAlertShow(false);
+                    setEmail('');
+                    setPseudo('');
+                    setPassword('');
+                    setConfirmPassword('');
+                    setSelected([]);
                 }else if (JSON.parse(request.response).email) {
                     setAlert(false);
                     setAlertSave(false);
@@ -56,6 +60,11 @@ export default function Register() {
                     setAlert(false);
                     setAlertSave(false);
                     setAlertMessage('Le mot de passe doit contenir au moins 6 caractères');
+                    setAlertShow(true);
+                } else {
+                    setAlert(false);
+                    setAlertSave(false);
+                    setAlertMessage('Le pseudo doit contenir au moins 2 caractères');
                     setAlertShow(true);
                 }
             }else {
