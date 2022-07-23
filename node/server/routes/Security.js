@@ -6,13 +6,14 @@ const { createToken } = require("../lib/jwt");
 const router = new Router();
 const nodemailer  = require("nodemailer");
 const crypto = require("crypto");
+require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
-  host: "smtp-relay.sendinblue.com",
-  port: 587,
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
   auth: {
-    user: "mkajeiou3@myges.fr",
-    pass: "d2QULsktrxBwZGDF",
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
   }
 });
 
