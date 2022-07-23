@@ -208,6 +208,7 @@ router.post("/login", async (req, res) => {
       email: result.email,
       pseudo: result.firstname,
       technologies: result.technologies,
+      isAdmin: result.isAdmin
     });
   } catch (error) {
     res.sendStatus(500);

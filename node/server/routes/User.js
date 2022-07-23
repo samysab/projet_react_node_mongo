@@ -36,7 +36,8 @@ router.get("/checkUser", async (req, res) => {
     res.send({
       pseudo: req.user.dataValues.firstname,
       email: req.user.dataValues.email,
-      technologies: req.user.dataValues.technologies
+      technologies: req.user.dataValues.technologies,
+      isAdmin: req.user.dataValues.isAdmin
     });
   } catch (error) {
     res.sendStatus(500);
