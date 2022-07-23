@@ -7,6 +7,8 @@ import Button from 'react-bootstrap/Button';
 import { useAuth } from './auth';
 import Alert from 'react-bootstrap/Alert';
 import './css/conversation.css';
+var moment = require('moment'); // require
+
 const request = new XMLHttpRequest();
 
 export function Conversation({ to, messages }) {
@@ -56,9 +58,12 @@ export function Conversation({ to, messages }) {
           messages.map(message => {
             if ((to == message.from || to == message.to) && (auth.user.id == message.from || auth.user.id == message.to)) {
               return (
+                <Fragment>
                 <p key={message.id} className={(message.from == auth.user.id ? "from-me" : "from-them")}>
                   {message.content}
+                  <br/><small style={{fontSize:"15px"}} className={(message.from == auth.user.id ? "from-me" : "from-them")}>{moment(message.updatedAt).format('DD/MM/YYYY hh:mm:ss') }</small>
                 </p>
+                </Fragment>
               );
             }
           })
