@@ -9,12 +9,15 @@ import NavRelationship from './NavRelationship';
 import Table from 'react-bootstrap/Table';
 import { Link, useParams } from "react-router-dom";
 import Card from 'react-bootstrap/Card';
-
+import Cookies from 'universal-cookie';
+import { useAuth } from './auth';
 
 
 
 export default function User() {
 
+    const auth = useAuth()
+    const cookies = new Cookies();
     const params = useParams();
     const [user, setUser] = useState([]);
     const [following, setFollowing] = useState([]);
@@ -31,7 +34,7 @@ export default function User() {
             }
         }
         request.open( "GET", `http://localhost:5000/users/user/following/${params.id}`, false );
-        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
     }, [action]);
 
@@ -43,7 +46,7 @@ export default function User() {
             }
         }
         request.open( "GET", `http://localhost:5000/users/user/follower/${params.id}`, false );
-        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
     }, [action]);
 
@@ -52,18 +55,27 @@ export default function User() {
         const request = new XMLHttpRequest();
         request.open( "PUT", `http://localhost:5000/users/friend-request/accept/${id}`, false ); 
         request.setRequestHeader("Content-type", "application/json");
-        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
+
+        request.open( "POST", `http://localhost:5000/users/follow`, false ); 
+        request.setRequestHeader("Content-type", "application/json");
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
+        request.send(JSON.stringify({
+            "follower": auth.user.id,
+            "following": user[0]?.id,
+            "status": 1,
+        }));
 
         setAction("ACCEPT");
 
-    },[]);
+    },[user]);
 
     const refuse = useCallback ( (id) => {
         const request = new XMLHttpRequest();
         request.open( "PUT", `http://localhost:5000/users/friend-request/refuse/${id}`, false ); 
         request.setRequestHeader("Content-type", "application/json");
-        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
 
         setAction("REFUSE");
@@ -71,13 +83,12 @@ export default function User() {
     },[]);
 
     const follow = useCallback( () => {
-
         const request = new XMLHttpRequest();
         request.open( "POST", `http://localhost:5000/users/follow`, false ); 
         request.setRequestHeader("Content-type", "application/json");
-        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send(JSON.stringify({
-            "follower": 1,
+            "follower": auth.user.id,
             "following": user[0]?.id,
             "status": 0,
         }));
@@ -97,7 +108,7 @@ export default function User() {
 
         request.open( "DELETE", `http://localhost:5000/users/unfollow/${rFollowingId}`, false ); 
         request.setRequestHeader("Content-type", "application/json");
-        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
 
         setAction("UNFOLLOW");

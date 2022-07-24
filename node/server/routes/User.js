@@ -53,11 +53,11 @@ router.put("/friend-request/accept/:id", async (req, res) =>{
 
 router.get("/search/:word", async (req, res) =>{
   try {
-    
+  
     const result = await User.findAll({
       where: {
         id: {
-          [Op.ne]: 1
+          [Op.ne]: req.user.dataValues.id
         },
 
         [Op.or]: [
@@ -144,7 +144,7 @@ router.post("/follow", async (req, res) => {
 router.get("/friend-request", async (req, res) => {
   try {
     const result = await User.findAll({
-      where:{ id : 1},
+      where:{ id : req.user.dataValues.id},
       attributes: [],
       include: [
         {
@@ -171,7 +171,7 @@ router.get("/friend-request", async (req, res) => {
 router.get("/friends", async (req, res) => {
   try {
     const result = await User.findAll({
-      where:{ id : 1},
+      where:{ id : req.user.dataValues.id},
       include: [
         {
           model: User,
@@ -199,7 +199,7 @@ router.get("/invitation-sent", async (req, res) => {
     { 
       type: QueryTypes.SELECT, 
       replacements: { 
-        id: 1 
+        id: req.user.dataValues.id
       } 
     }
     );
@@ -217,7 +217,7 @@ router.get("/users", async (req, res) => {
     const result = await User.findAll({
       where: {
         id: {
-          [Op.ne]: 1
+          [Op.ne]: req.user.dataValues.id
         }
       },
       include: [
@@ -254,7 +254,7 @@ router.get("/user/following/:id", async (req, res) => {
           required: false,
           attributes: ["firstname","id"],
           where:{
-              id:1
+              id: req.user.dataValues.id
           },
           through: {
             attributes: ["status","id"],
@@ -289,7 +289,7 @@ router.get("/user/follower/:id", async (req, res) => {
           required: false,
           attributes: ["firstname","id"],
           where: {
-            id:1,
+            id: req.user.dataValues.id,
           },
           through: {
             attributes: ["status","id"],
@@ -353,6 +353,7 @@ router.get("/checkUser", async (req, res) => {
   try {
     res.status(200);
     res.send({
+      id: req.user.dataValues.id,
       pseudo: req.user.dataValues.firstname,
       email: req.user.dataValues.email,
       technologies: req.user.dataValues.technologies

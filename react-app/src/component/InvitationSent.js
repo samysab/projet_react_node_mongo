@@ -5,9 +5,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavRelationship from './NavRelationship';
 import Table from 'react-bootstrap/Table';
+import Cookies from 'universal-cookie';
 
 export default function InvitationSent() {
 
+    const cookies = new Cookies();
     const [invitationSent, setInvitationSent] = useState([]);
 
     useEffect( () => {
@@ -19,7 +21,7 @@ export default function InvitationSent() {
             }
         }
         request.open( "GET", 'http://localhost:5000/users/invitation-sent', false );
-        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
 
     }, []);

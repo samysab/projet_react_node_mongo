@@ -5,9 +5,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavRelationship from './NavRelationship';
 import Table from 'react-bootstrap/Table';
+import Cookies from 'universal-cookie';
 
 export default function FriendRequest() {
-
+    
+    const cookies = new Cookies();
     const [friendsRequest, setFriendsRequest] = useState([]);
 
     useEffect( () => {
@@ -19,7 +21,7 @@ export default function FriendRequest() {
             }
         }
         request.open( "GET", 'http://localhost:5000/users/friend-request', false );
-        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
 
     }, []);
@@ -29,7 +31,7 @@ export default function FriendRequest() {
         const request = new XMLHttpRequest();
         request.open( "PUT", `http://localhost:5000/users/friend-request/accept/${id}`, false ); 
         request.setRequestHeader("Content-type", "application/json");
-        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
 
         let newFriendsRequest = friendsRequest.slice();
@@ -44,7 +46,7 @@ export default function FriendRequest() {
         const request = new XMLHttpRequest();
         request.open( "PUT", `http://localhost:5000/users/friend-request/refuse/${id}`, false ); 
         request.setRequestHeader("Content-type", "application/json");
-        request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
 
         let newFriendsRequest = friendsRequest.slice();

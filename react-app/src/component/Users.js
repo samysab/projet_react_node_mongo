@@ -8,14 +8,14 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import NavRelationship from './NavRelationship';
 import Table from 'react-bootstrap/Table';
 import { Link } from "react-router-dom";
-
+import Cookies from 'universal-cookie';
 
 
 export default function Users() {
 
     const [users, setUsers] = useState([]);
     const [value, setValue] = useState("");
-    
+    const cookies = new Cookies();
    
 
     useEffect(() => {
@@ -29,7 +29,7 @@ export default function Users() {
                 }
             }
             request.open( "GET", 'http://localhost:5000/users/users', false );
-            request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+            request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
             request.send();
         }else{
             const request = new XMLHttpRequest();
@@ -40,7 +40,7 @@ export default function Users() {
             }
             request.open( "GET", `http://localhost:5000/users/search/${value}`, false ); 
             request.setRequestHeader("Content-type", "application/json");
-            request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
+            request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
             request.send();
         }
         
