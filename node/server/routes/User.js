@@ -5,8 +5,11 @@ const { Relationship } = require("../models/postgres");
 const { ValidationError, where } = require("sequelize");
 const checkIsAdmin = require("../middlewares/checkIsAdmin");
 const checkAuthentication = require("../middlewares/checkAuthentication");
-const { Op } = require("sequelize");
+const { Op, QueryTypes } = require("sequelize");
+const connection = require("../models/postgres/db");
 const router = new Router();
+
+
 
 const formatError = (validationError) => {
   return validationError.errors.reduce((acc, error) => {
@@ -188,6 +191,26 @@ router.get("/friends", async (req, res) => {
     console.error(error);
   }
 });
+
+router.get("/invitation-sent", async (req, res) => {
+  try {
+    const result = await connection.query(
+      "SELECT * FROM users u ,relationships r WHERE r.following = u.id and r.follower = :id ", 
+    { 
+      type: QueryTypes.SELECT, 
+      replacements: { 
+        id: 1 
+      } 
+    }
+    );
+    res.json(result);
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
+  }
+});
+
+
 
 router.get("/users", async (req, res) => {
   try {
