@@ -6,9 +6,11 @@ import Col from 'react-bootstrap/Col';
 import NavRelationship from './NavRelationship';
 import Table from 'react-bootstrap/Table';
 import Cookies from 'universal-cookie';
+import { useAuth } from './auth';
 
 export default function FriendRequest() {
     
+    const auth = useAuth()
     const cookies = new Cookies();
     const [friendsRequest, setFriendsRequest] = useState([]);
 
@@ -28,6 +30,8 @@ export default function FriendRequest() {
 
     const accept = useCallback ( (id) =>{
 
+
+       
         const request = new XMLHttpRequest();
         request.open( "PUT", `http://localhost:5000/users/friend-request/accept/${id}`, false ); 
         request.setRequestHeader("Content-type", "application/json");
@@ -35,9 +39,20 @@ export default function FriendRequest() {
         request.send();
 
         let newFriendsRequest = friendsRequest.slice();
+        let user = newFriendsRequest.find(user => user.relationship.id == id);
         let index = newFriendsRequest.findIndex(user => user.relationship.id == id);
+
+        request.open( "POST", `http://localhost:5000/users/follow`, false ); 
+        request.setRequestHeader("Content-type", "application/json");
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
+        request.send(JSON.stringify({
+            "follower": auth.user.id,
+            "following": user?.id,
+            "status": 1,
+        }));
+
+      
         newFriendsRequest.splice(index,1);
- 
         setFriendsRequest(newFriendsRequest);
 
     },[friendsRequest]);

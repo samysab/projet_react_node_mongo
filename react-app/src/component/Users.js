@@ -10,7 +10,6 @@ import Table from 'react-bootstrap/Table';
 import { Link } from "react-router-dom";
 import Cookies from 'universal-cookie';
 
-
 export default function Users() {
 
     const [users, setUsers] = useState([]);
@@ -19,7 +18,7 @@ export default function Users() {
    
 
     useEffect(() => {
-
+        
         if (value == ""){
             const request = new XMLHttpRequest();
             request.onreadystatechange = function() {
