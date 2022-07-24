@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { Message } = require("../models/postgres");
-const { ValidationError, Op } = require("sequelize");
+const connection = require("../models/postgres/db");
+const { ValidationError, Op, QueryTypes } = require("sequelize");
 
 const router = new Router();
 
@@ -13,14 +14,12 @@ const formatError = (validationError) => {
 
 router.get("/", async (req, res) => {
   try {
-    const { page = 1, perPage = 10, ...criteria } = req.query;
-    const result = await Message.findAll({
-      where: criteria,
-      limit: perPage,
-      attributes: ["from"],
-      group: "from",
-      offset: (page - 1) * perPage
-    });
+    const result = await connection.query(
+      "SELECT * from messages m INNER JOIN users u ON m.from = u.id", 
+    { 
+      type: QueryTypes.SELECT
+    }
+    );
     res.json(result);
   } catch (error) {
     res.sendStatus(500);

@@ -62,7 +62,6 @@ export function Conversation({ to, messages }) {
       if (request.response === true) {
         console.log("Erreur lors de la suppression du message");
       } else {
-        console.log("ok");
         setDeleted(idMessage)
       }
     },

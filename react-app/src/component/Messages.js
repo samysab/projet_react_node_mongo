@@ -43,6 +43,7 @@ export default function Messages() {
     request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
     request.send();
 
+
   }, [value]);
 
   return (
@@ -58,7 +59,7 @@ export default function Messages() {
                     if (auth.user.id != message.from) {
                       return (
                         <div className="d-flex mt-2" key={message.from}>
-                          <Button variant="primary" onClick={() => setValue(message.from)}>{message.from}</Button>
+                          <Button variant="primary" onClick={() => setValue(message.from)}>{message.firstname}</Button>
                         </div>
                       );
                     }
