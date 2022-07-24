@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { User } = require("../models/postgres");
+const { User, Report} = require("../models/postgres");
 const { ValidationError } = require("sequelize");
 const checkIsAdmin = require("../middlewares/checkIsAdmin");
 const Message = require("../models/postgres/Message");
@@ -123,7 +123,7 @@ router.get("/manage-messages", async (req, res) => {
 });
 
 // Envoyer un message en cas d'avertissement
-router.post("/warn-user", async (req, res) => {
+router.post("/warn-user/:id", async (req, res) => {
     try {
         const result = await Message.create(req.body);
         res.status(201).json(result);
@@ -137,7 +137,34 @@ router.post("/warn-user", async (req, res) => {
     }
 });
 
-// Classer sans suite un report ?
+// Classer sans suite un report
+router.put("/filed-away/:id", async (req, res) => {
+    try {
+        const [nbLines, [result]] = await Report.update(
+            {
+                "status": "-1"
+            }, {
+            where: {
+                id: parseInt(req.params.id, 10),
+            },
+            returning: true,
+        });
+        if (!nbLines) {
+            res.sendStatus(404);
+        } else {
+            res.json(result);
+        }
+    } catch (error) {
+        console.log(error);
+
+        if (error instanceof ValidationError) {
+            res.status(422).json(formatError(error));
+        } else {
+            res.sendStatus(500);
+            console.error(error);
+        }
+    }
+});
 
 
 module.exports = router;
