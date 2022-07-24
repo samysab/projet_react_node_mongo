@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { User } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
 const checkIsAdmin = require("../middlewares/checkIsAdmin");
+const Message = require("../models/postgres/Message");
 
 const router = new Router();
 
@@ -76,16 +77,31 @@ router.post("/create-user", async (req, res) => {
 //Garder dans la DB mais mettre email par défaut
 router.put("/delete-user/:id", async (req, res) => {
     try {
-        const [nbLines, [result]] = await User.update(
-            {
-                email: "default@default.com",
-                status: "-1"
-            }, {
-            where: {
-                id: parseInt(req.params.id, 10),
-            },
-            returning: true,
-        });
+        if(req.body.status === "-1") { // Suppression d'un compte (possibilité de récupérer son compte)
+            const [nbLines, [result]] = await User.update(
+                {
+                    email: "default@default.com",
+                    status: req.body.status
+                }, {
+                    where: {
+                        id: parseInt(req.params.id, 10),
+                    },
+                    returning: true,
+                });
+
+
+        }else if (req.body.status === "-2"){ //Suppression de tous les liens d'amitié mais garder l'email
+            const [nbLines, [result]] = await User.update(
+                {
+                    status: req.body.status
+                }, {
+                    where: {
+                        id: parseInt(req.params.id, 10),
+                    },
+                    returning: true,
+                });
+        }
+
         if (!nbLines) {
             res.sendStatus(404);
         } else {
@@ -105,5 +121,23 @@ router.put("/delete-user/:id", async (req, res) => {
 router.get("/manage-messages", async (req, res) => {
     res.send("Hello admin");
 });
+
+// Envoyer un message en cas d'avertissement
+router.post("/warn-user", async (req, res) => {
+    try {
+        const result = await Message.create(req.body);
+        res.status(201).json(result);
+    } catch (error) {
+        if (error instanceof ValidationError) {
+            res.status(422).json(formatError(error));
+        } else {
+            res.sendStatus(500);
+            console.error(error);
+        }
+    }
+});
+
+// Classer sans suite un report ?
+
 
 module.exports = router;

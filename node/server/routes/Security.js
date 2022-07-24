@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
   port: 587,
   auth: {
     user: "mkajeiou3@myges.fr",
-    pass: "d2QULsktrxBwZGDF",
+    pass: "xsmtpsib-9ad5020ccfe119d9a40e3d3202eca002d76371a4f2a7cd893c6e6c48b4ae348d-m29xWdSbgkwX1KzC\n",
   }
 });
 
