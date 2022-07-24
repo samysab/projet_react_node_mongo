@@ -195,7 +195,7 @@ router.get("/friends", async (req, res) => {
 router.get("/invitation-sent", async (req, res) => {
   try {
     const result = await connection.query(
-      "SELECT * FROM users u ,relationships r WHERE r.following = u.id and r.follower = :id ", 
+      "SELECT * FROM users u ,relationships r WHERE r.following = u.id and r.follower = :id ORDER BY r.id DESC", 
     { 
       type: QueryTypes.SELECT, 
       replacements: { 
