@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Alert from 'react-bootstrap/Alert';
 import {Link} from "react-router-dom";
 import { MultiSelect } from "react-multi-select-component";
 
@@ -24,21 +25,53 @@ export default function Register() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [selected, setSelected] = useState([]);
+    const [alert, setAlert] = useState(false);
+    const [alertShow, setAlertShow] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertSave, setAlertSave] = useState(false);
 
     const save = useCallback(
         () => {
-            console.log(selected);
-            request.open( "POST", 'http://localhost:5000/register', false ); //false for synchronous request
-            request.setRequestHeader("Content-type", "application/json");
-            request.send(JSON.stringify({
-                "email": email,
-                "pseudo": pseudo,
-                "password": password,
-                "technologies": selected
-            }));
-            // return request.responseText;
+            if (password === confirmPassword) {
+                request.open("POST", 'http://localhost:5000/register', false);
+                request.setRequestHeader("Content-type", "application/json");
+                request.send(JSON.stringify({
+                    "email": email,
+                    "pseudo": pseudo,
+                    "password": password,
+                    "technologies": selected
+                }));
+
+                if (JSON.parse(request.response).id) {
+                    setAlertSave(true);
+                    setAlert(false);
+                    setAlertShow(false);
+                    setEmail('');
+                    setPseudo('');
+                    setPassword('');
+                    setConfirmPassword('');
+                    setSelected([]);
+                }else if (JSON.parse(request.response).email) {
+                    setAlert(false);
+                    setAlertSave(false);
+                    setAlertMessage('Email déjà utilisé');
+                    setAlertShow(true);
+                } else if (JSON.parse(request.response).password) {
+                    setAlert(false);
+                    setAlertSave(false);
+                    setAlertMessage('Le mot de passe doit contenir au moins 6 caractères');
+                    setAlertShow(true);
+                } else {
+                    setAlert(false);
+                    setAlertSave(false);
+                    setAlertMessage('Le pseudo doit contenir au moins 2 caractères');
+                    setAlertShow(true);
+                }
+            }else {
+                setAlert(true);
+            }
         },
-        [selected, email, password]
+        [selected, email, password, confirmPassword, pseudo, alert]
     );
 
     return (
@@ -46,6 +79,21 @@ export default function Register() {
             <Container>
                 <Row>
                     <Col>
+                        {alert ?
+                            <Alert key="danger" variant="danger" className="mt-3">
+                                Les mots de passe ne correspondent pas
+                            </Alert> : ''
+                        }
+                        {alertShow ?
+                            <Alert key="danger" variant="danger" className="mt-3">
+                                {alertMessage}
+                            </Alert> : ''
+                        }
+                        {alertSave ?
+                            <Alert key="success" variant="success" className="mt-3">
+                                Votre compte a été créé avec succès. Veuillez consulter votre boîte mail pour confirmer votre compte.
+                            </Alert> : ''
+                        }
                         <div className={"d-flex justify-content-center mt-5"}>
                             <Card style={{ width: '25rem' }}>
                                 <Card.Body>

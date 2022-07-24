@@ -38,6 +38,18 @@ User.init(
         },
       },
     },
+    technologies: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    token: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     sequelize,

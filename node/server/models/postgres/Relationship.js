@@ -6,6 +6,12 @@ class Relationship extends Model {}
 
 Relationship.init(
     {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+
         follower: {
             type: DataTypes.INTEGER,
             allowNull: false,

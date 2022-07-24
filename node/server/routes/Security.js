@@ -4,6 +4,18 @@ const { ValidationError } = require("sequelize");
 const bcryptjs = require("bcryptjs");
 const { createToken } = require("../lib/jwt");
 const router = new Router();
+const nodemailer  = require("nodemailer");
+const crypto = require("crypto");
+require('dotenv').config();
+
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  }
+});
 
 const formatError = (validationError) => {
   return validationError.errors.reduce((acc, error) => {
@@ -17,14 +29,146 @@ router.post("/register", async (req, res) => {
   const pseudo = req.body.pseudo.trim();
 
   try {
+    let token = crypto.randomBytes(64).toString('hex');
+
     const result = await User.create({
       email: email,
       password: req.body.password,
       isAdmin: false,
-      firstname: pseudo
+      firstname: pseudo,
+      status: 0,
+      token: token,
+      technologies: JSON.stringify(req.body.technologies)
+    });
+
+    let url = 'http://localhost:3000/confirmation/'+token;
+
+    await transporter.sendMail({
+        from: "pa.express.esgi@gmail.com",
+        to: email,
+        subject: "Bienvenue",
+        text: "Bienvenue sur notre nouveau site",
+        html: `<h2>Bienvenue sur notre nouveau site. Pour confirmer votre compte <a href="${url}">cliquez ici</a>.</h2>`
     });
 
     res.status(201).json(result);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+});
+
+router.put("/confirmation", async (req, res) => {
+  try {
+    console.log('test');
+    const result = await User.update({
+        status: 1,
+        token: ''
+      }, {
+      where: {
+        token: req.body.token,
+      },
+    });
+
+    if (result[0] === 0) {
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Token is invalid',
+      });
+    }else {
+      res.status(200);
+      res.send({
+        success: true,
+        message: 'Success'
+      });
+    }
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+});
+
+router.post("/reset", async (req, res) => {
+  try {
+    const email = req.body.email.trim();
+
+    let token = crypto.randomBytes(64).toString('hex');
+
+    const result = await User.update({
+      token: token
+    }, {
+      where: {
+        email: email,
+      },
+    });
+
+    if (result[0] === 0) {
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Error',
+      });
+    }else {
+      let url = 'http://localhost:3000/resetPassword/'+token;
+
+      await transporter.sendMail({
+        from: "pa.express.esgi@gmail.com",
+        to: email,
+        subject: "Réinitialisation du mot de passe",
+        text: "Réinitialisation du mot de passe",
+        html: `<h2>Vous avez fait une demande de réinitialisation de votre mot de passe. Pour le réinitialiser <a href="${url}">cliquez ici</a>.</h2>`
+      });
+
+      res.status(200);
+      res.send({
+        success: true,
+        message: 'Success'
+      });
+    }
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+});
+
+router.put("/resetPassword", async (req, res) => {
+  try {
+    const result = await User.update({
+      token: '',
+      password: req.body.password
+    }, {
+      where: {
+        token: req.body.token,
+      },
+      individualHooks: true,
+    });
+
+    if (result[0] === 0) {
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Error',
+      });
+    }else {
+      res.status(200);
+      res.send({
+        success: true,
+        message: 'Success'
+      });
+    }
   } catch (error) {
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
@@ -40,21 +184,32 @@ router.post("/login", async (req, res) => {
     const result = await User.findOne({
       where: {
         email: req.body.email,
+        status: 1,
       },
     });
     if (!result) {
-      res.status(401).json({
-        email: "Email not found",
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Email not found'
       });
       return;
     }
     if (!(await bcryptjs.compare(req.body.password, result.password))) {
-      res.status(401).json({
-        password: "Password is incorrect",
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Password is incorrect'
       });
       return;
     }
-    res.json({ token: await createToken(result) });
+    res.status(200);
+    res.json({
+      token: await createToken(result),
+      email: result.email,
+      pseudo: result.firstname,
+      technologies: result.technologies,
+    });
   } catch (error) {
     res.sendStatus(500);
     console.error(error);
