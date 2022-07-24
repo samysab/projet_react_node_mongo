@@ -59,9 +59,8 @@ export function Conversation({ to, messages }) {
       request.setRequestHeader("Content-type", "application/json");
       request.send(JSON.stringify({}));
 
-      console.log(request.response);
       if (request.response === true) {
-        console.log("ko");
+        console.log("Erreur lors de la suppression du message");
       } else {
         console.log("ok");
         setDeleted(idMessage)
@@ -79,7 +78,6 @@ export function Conversation({ to, messages }) {
 
 
   const onBlurModify = event => {
-    console.log(event.target.dataset.id);
     if (messageModify == "" || messageModify == ",") {
       contentRef.current.focus();
       console.log("Erreur dans le contenu du message");
@@ -98,7 +96,6 @@ export function Conversation({ to, messages }) {
         setContentModified(["", ""])
 
       } else {
-        console.log("aaaa");
         setAlert(false);
         setContentModified([event.target.dataset.id, messageModify]);
         setModifiedAt([event.target.dataset.id, moment().format('DD/MM/YYYY HH:mm:ss')]);

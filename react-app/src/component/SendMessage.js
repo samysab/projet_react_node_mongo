@@ -40,7 +40,6 @@ export function SendMessage({ to }) {
       if (JSON.parse(request.response).success === true) {
         setAlert(false);
       } else {
-        console.log("aaaa");
         setAlert(false);
       }
     }
