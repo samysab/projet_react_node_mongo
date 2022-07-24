@@ -54,15 +54,14 @@ export function Conversation({ to, messages }) {
 
   useEffect(
     () => {
-      console.log("ok " + idMessage);
-      request.open("PUT", 'http://localhost:5000/messages/changeStatus/'+idMessage, false); //false for synchronous request
+      request.open("PUT", 'http://localhost:5000/messages/changeStatus/' + idMessage, false); //false for synchronous request
       request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
       request.setRequestHeader("Content-type", "application/json");
       request.send(JSON.stringify({}));
 
       console.log(request.response);
       if (request.response === true) {
-          console.log("ko");
+        console.log("ko");
       } else {
         console.log("ok");
         setDeleted(idMessage)
@@ -70,6 +69,44 @@ export function Conversation({ to, messages }) {
     },
     [idMessage]
   );
+
+  const [paraToInput, setParaToInput] = useState(false);
+  const [contentModified, setContentModified] = useState(["", ""]);
+  const [modifiedAt, setModifiedAt] = useState(["", ""]);
+  const [messageModify, setMessageModify] = useState(["", ""]);
+  const modifyContent = ({ target: { value } }) => setMessageModify(value);
+  const modifycontentRef = useRef(null);
+
+
+  const onBlurModify = event => {
+    console.log(event.target.dataset.id);
+    if (messageModify == "" || messageModify == ",") {
+      contentRef.current.focus();
+      console.log("Erreur dans le contenu du message");
+    } else {
+      setAlert(false);
+
+      request.open("PUT", 'http://localhost:5000/messages/'+event.target.dataset.id, false); //false for synchronous request
+      request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
+      request.setRequestHeader("Content-type", "application/json");
+      request.send(JSON.stringify({
+        "content": messageModify
+      }));
+      if (JSON.parse(request.response).success === true) {
+        setAlert(false);
+        setModifiedAt(["",""])
+        setContentModified(["", ""])
+
+      } else {
+        console.log("aaaa");
+        setAlert(false);
+        setContentModified([event.target.dataset.id, messageModify]);
+        setModifiedAt([event.target.dataset.id, moment().format('DD/MM/YYYY HH:mm:ss')]);
+        setParaToInput(null);
+      }
+    }
+  }
+
 
   return (
     <Fragment>
@@ -80,13 +117,13 @@ export function Conversation({ to, messages }) {
               return (
                 <Fragment>
                   <p key={message.id} className={(message.from == auth.user.id ? "from-me" : "from-them")}>
-                    {(!message.status || idMessage == message.id ? "/!\\ Ce message a été supprimer" : message.content)}
+                    {(paraToInput != message.id ? <p id={"message_" + message.id}>{(!message.status || idMessage == message.id ? "/!\\ Ce message a été supprimer" :(contentModified[0] != message.id ? message.content : contentModified[1])  )}</p> : <input value={messageModify} data-id={message.id} onChange={(modifyContent)} onBlur={onBlurModify} ref={modifycontentRef} />)}
+                    
+                    {(!message.status || idMessage == message.id || auth.user.id != message.from ? "" : <Button onClick={() => setIdMessage(message.id)}>Supprimer</Button>)}
+                    {(message.status ? <Button onClick={() => setParaToInput(message.id)}>Modifier</Button> : "" )}
+                    
 
-                    {(!message.status || idMessage == message.id ? "" : <Button onClick={() => setIdMessage(message.id)}>Supprimer</Button>)}
-                   
-
-
-                    <br /><small style={{ fontSize: "15px" }} className={(message.from == auth.user.id ? "from-me" : "from-them")}>{moment(message.updatedAt).format('DD/MM/YYYY hh:mm:ss')}</small>
+                    <br /><small style={{ fontSize: "15px" }} className={(message.from == auth.user.id ? "from-me" : "from-them")}>{( message.createdAt != message.updatedAt ? (modifiedAt[0] == message.id  ? modifiedAt[1] :moment(message.updatedAt).format('DD/MM/YYYY hh:mm:ss')) : moment(message.createdAt).format('DD/MM/YYYY hh:mm:ss')) }</small>
                   </p>
                 </Fragment>
               );

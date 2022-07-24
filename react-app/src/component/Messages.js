@@ -5,7 +5,6 @@ import Col from 'react-bootstrap/Col';
 import Cookies from 'universal-cookie';
 import Button from 'react-bootstrap/Button';
 import { useAuth } from './auth';
-import { BrowserRouter as Router, Link, useParams } from "react-router-dom";
 import { Conversation } from "./Conversation";
 const request = new XMLHttpRequest();
 
@@ -56,7 +55,6 @@ export default function Messages() {
               <div>
                 {
                   nbMessages.map(message => {
-                    // console.log(message);
                     if (auth.user.id != message.from) {
                       return (
                         <div className="d-flex mt-2" key={message.from}>

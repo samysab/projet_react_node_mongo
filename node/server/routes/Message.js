@@ -78,6 +78,30 @@ router.get("/getAllMessagesPerUser/:id", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  try {
+    const [nbLines, [result]] = await Message.update(req.body, {
+      where: {
+        id: parseInt(req.params.id, 10),
+      },
+      returning: true,
+    });
+    if (!nbLines) {
+      res.sendStatus(404);
+    } else {
+      res.json(result);
+    }
+  } catch (error) {
+    console.log(error);
+
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+});
 
 router.put("/changeStatus/:id", async (req, res) => {
   try {
