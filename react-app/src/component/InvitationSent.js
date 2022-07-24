@@ -26,13 +26,14 @@ export default function InvitationSent() {
 
     const StatusMessage = useCallback ((status) => {
 
-       if(status == 0){
+      
+       if(status.status == 0){
            return (
                <p>Invitation en attente.</p>
            );
        }
 
-        if(status == 1){
+        if(status.status == 1){
             return (
                 <p>Invitation validée.</p>
             );
