@@ -16,6 +16,9 @@ export default function NavRelationship(){
                 <ListGroup.Item>
                     <Link to={'/users/friend-request'}>Mes demandes en attente</Link>
                 </ListGroup.Item>
+                <ListGroup.Item>
+                    <Link to={'/users/send-invitation'}>Mes demandes envoyées</Link>
+                </ListGroup.Item>
                
             </ListGroup>
         </Fragment>
