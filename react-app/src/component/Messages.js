@@ -53,7 +53,7 @@ export default function Messages() {
           <Row>
             <Col>
               <h2>Mes Messages</h2>
-              <div>
+              <div id="mesMessages">
                 {
                   nbMessages.map(message => {
                     if (auth.user.id != message.from) {
