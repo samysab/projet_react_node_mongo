@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { User } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
 const checkIsAdmin = require("../middlewares/checkIsAdmin");
+const Post = require("../models/postgres/Post");
 
 const router = new Router();
 

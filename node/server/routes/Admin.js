@@ -80,7 +80,7 @@ router.put("/delete-user/:id", async (req, res) => {
         if(req.body.status === "-1") { // Suppression d'un compte (possibilité de récupérer son compte)
             const [nbLines, [result]] = await User.update(
                 {
-                    email: "default@default.com",
+                    email: "default-"+ req.params.id +"@default.com",
                     status: req.body.status
                 }, {
                     where: {

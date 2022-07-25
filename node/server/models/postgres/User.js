@@ -1,72 +1,72 @@
-const { DataTypes, Model } = require("sequelize");
+const {DataTypes, Model} = require("sequelize");
 const sequelize = require("./db");
 const bcryptjs = require("bcryptjs");
 
 class User extends Model {}
 
 User.init(
-  {
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
-      },
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: {
-          min: 6,
-          max: 255,
+    {
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+                isEmail: true,
+            },
         },
-      },
-    },
-    isAdmin: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      allowNull: false,
-    },
-    firstname: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: {
-          min: 2,
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                len: {
+                    min: 6,
+                    max: 255,
+                },
+            },
         },
-      },
+        isAdmin: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: false,
+        },
+        firstname: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                len: {
+                    min: 2,
+                },
+            },
+        },
+        technologies: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
+        status: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        token: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     },
-    technologies: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-    },
-    status: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    token: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-  },
-  {
-    sequelize,
-    modelName: "user",
-  }
+    {
+        sequelize,
+        modelName: "user",
+    }
 );
 
 User.addHook("beforeCreate", async (user) => {
-  user.password = await bcryptjs.hash(user.password, await bcryptjs.genSalt());
+    user.password = await bcryptjs.hash(user.password, await bcryptjs.genSalt());
 });
-User.addHook("beforeUpdate", async (user, { fields }) => {
-  if (fields.includes("password")) {
-    user.password = await bcryptjs.hash(
-      user.password,
-      await bcryptjs.genSalt()
-    );
-  }
+User.addHook("beforeUpdate", async (user, {fields}) => {
+    if (fields.includes("password")) {
+        user.password = await bcryptjs.hash(
+            user.password,
+            await bcryptjs.genSalt()
+        );
+    }
 });
 
 module.exports = User;
