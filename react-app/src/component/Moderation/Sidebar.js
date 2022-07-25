@@ -21,19 +21,19 @@ const Sidebar = () => {
 
                 <CDBSidebarContent className="sidebar-content">
                     <CDBSidebarMenu>
-                        <NavLink exact to="/admin" activeClassName="activeClicked">
+                        <NavLink to="/admin">
                             <CDBSidebarMenuItem icon="columns">Dashboard</CDBSidebarMenuItem>
                         </NavLink>
-                        <NavLink exact to="/admin/manage-user" activeClassName="activeClicked">
+                        <NavLink to="/admin/manage-user" >
                             <CDBSidebarMenuItem icon="users">Gérer les utilisateurs</CDBSidebarMenuItem>
                         </NavLink>
-                        <NavLink exact to="/admin/manage-message" activeClassName="activeClicked">
+                        <NavLink to="/admin/manage-message" >
                             <CDBSidebarMenuItem icon="comments">Gérer les messages</CDBSidebarMenuItem>
                         </NavLink>
-                        <NavLink exact to="/admin/manage-reports" activeClassName="activeClicked">
+                        <NavLink to="/admin/manage-reports">
                             <CDBSidebarMenuItem icon="shield-alt">Gérer les reports</CDBSidebarMenuItem>
                         </NavLink>
-                        <NavLink exact to="/profile" activeClassName="activeClicked">
+                        <NavLink to="/profile" >
                             <CDBSidebarMenuItem icon="user">Profile page</CDBSidebarMenuItem>
                         </NavLink>
 

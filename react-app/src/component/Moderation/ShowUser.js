@@ -1,9 +1,9 @@
 import React, {Fragment, useCallback, useEffect, useState} from "react";
 import Sidebar from "./Sidebar";
 import Cookies from "universal-cookie";
-import {Button, Card, Col, Row} from "react-bootstrap";
+import {Alert, Button, Card, Col, Row} from "react-bootstrap";
 import {Link, useParams} from "react-router-dom";
-import {BsFillPersonXFill, BsFillTrashFill} from "react-icons/bs";
+import {BsFillPersonXFill, BsFillTrashFill, BsTelegram} from "react-icons/bs";
 import {useAuth} from "../auth";
 
 export default function ShowUser() {
@@ -12,12 +12,14 @@ export default function ShowUser() {
     const [status, setStatus] = useState(0);
     const [statusText, setStatusText] = useState("");
     const [message, setMessage] = useState("");
+    const [alert, setAlert] = useState("");
     const cookies = new Cookies();
     const params = useParams();
     const auth = useAuth();
 
-    const handleChange = (event) => {
-        setMessage(event.target.value);
+    const onFormSubmit = event => {
+        setAlert("Message : '" + message + "' envoyé à " + user.firstname + " " + user.email);
+        event.preventDefault();
     }
 
     const myHeaders = new Headers();
@@ -74,7 +76,11 @@ export default function ShowUser() {
         };
         const deleteUser = () => {
             fetch(`http://localhost:5000/admin/delete-user/${params.id}`, deleteUserHeaders)
-                .then(x => console.log(x))
+                .then(res => res.json())
+                .then(data => {
+                    setStatus(data.status);
+                    setStatusText(data.statusText);
+                })
         }
         deleteUser();
     }, []);
@@ -87,20 +93,23 @@ export default function ShowUser() {
             headers: myHeaders,
             mode: 'cors',
             cache: 'default',
-            body: {
-                "content": message,
-                "status": true,
-                "from": auth.user.id,
-                "to": user.id
-            }
+            body: JSON.stringify({
+                content: message,
+                status: true,
+                from: auth?.user.id,
+                to: user?.id
+            })
         };
 
         const sendMessage = () => {
             fetch(`http://localhost:5000/admin/warn-user`, postMessageHeaders)
-                .then(x => console.log(x))
+                .then(data => {
+                    setStatus(data.status);
+                    setStatusText(data.statusText);
+                })
         }
         sendMessage();
-    }, []);
+    }, [message]);
 
 
     return (
@@ -114,20 +123,28 @@ export default function ShowUser() {
                         <Card.Body>
                             <Card.Title>{user?.firstname}</Card.Title>
                             <Card.Subtitle className="mb-2 text-muted">{user?.email}</Card.Subtitle>
-                            <Card.Subtitle className="mb-2 text-muted">{user?.status}</Card.Subtitle>
+                            <Card.Subtitle className="mb-2 text-muted">{user?.isAdmin ? "Administrateur" : "Utilisateur standard" }</Card.Subtitle>
                             <Button onClick={() => deactivate()} className="btn btn-danger">
-                               <BsFillTrashFill/>
+                                <BsFillTrashFill/>
                             </Button>
                             <Button onClick={() => ban()} className="btn btn-warning">
                                 <BsFillPersonXFill/>
                             </Button>
 
                             <Card.Title>Envoyer un message</Card.Title>
-                            <input value={message} onChange={handleChange}/>
+                            {   alert !== "" && status === 201?
+                                <Alert key="success" variant="success" className="mt-1">
+                                    {alert}
+                                </Alert> : ''
+                            }
+                            <form onSubmit={onFormSubmit}>
+                                <input onChange={(e) => {
+                                    setMessage(e.target.value);
+                                }}/>
 
-                            <Button onClick={() => sendMsg()} className="btn btn-primary">Envoyer un
-                                message</Button>
-
+                                <Button type={"submit"} onClick={() => sendMsg()}
+                                        className="btn btn-primary"><BsTelegram/></Button>
+                            </form>
                         </Card.Body>
                     </Card>
                 </Col>

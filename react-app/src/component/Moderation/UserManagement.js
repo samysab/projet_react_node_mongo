@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import Cookies from "universal-cookie";
 import {Col, Container, Row, Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import {BsFillPencilFill, BsFillPersonPlusFill} from "react-icons/bs";
+import {BsFillPencilFill, BsFillPersonPlusFill, BsPersonBadgeFill} from "react-icons/bs";
 
 export default function UserManagement() {
 
@@ -62,7 +62,9 @@ export default function UserManagement() {
                                                 <p>{user.email}</p>
                                             </td>
                                             <td>
-                                                <Link className="btn btn-primary" to={`/show-user/${user.id}`}>Voir le profil</Link>
+                                                <Link className="btn btn-primary" to={`/show-user/${user.id}`}>
+                                                    <BsPersonBadgeFill/>
+                                                </Link>
                                                 <Link className="btn btn-warning" to={`/edit-user/${user.id}`}>
                                                     <BsFillPencilFill/>
                                                 </Link>
