@@ -15,6 +15,8 @@ import {RequireAuth} from './component/RequireAuth';
 import {CheckAuth} from './component/CheckAuth';
 import Moderation from "./component/Moderation/Moderation";
 import {CheckAdmin} from "./component/CheckAdmin";
+import UserManagement from "./component/Moderation/UserManagement";
+import ShowUser from "./component/Moderation/ShowUser";
 
 function App() {
     return (
@@ -39,6 +41,14 @@ function App() {
 
                 <Route path="/admin" element={
                     <Moderation/>
+                }/>
+
+                <Route path="/admin/manage-user" element={
+                    <UserManagement/>
+                }/>
+
+                <Route path="/show-user/:id" element={
+                    <ShowUser/>
                 }/>
 
                 <Route path="/confirmation">
