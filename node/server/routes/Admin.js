@@ -123,11 +123,12 @@ router.get("/manage-messages", async (req, res) => {
 });
 
 // Envoyer un message en cas d'avertissement
-router.post("/warn-user/:id", async (req, res) => {
+router.post("/warn-user", async (req, res) => {
     try {
         const result = await Message.create(req.body);
         res.status(201).json(result);
     } catch (error) {
+        console.log(req.body);
         if (error instanceof ValidationError) {
             res.status(422).json(formatError(error));
         } else {

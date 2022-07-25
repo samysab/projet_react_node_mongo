@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
   port: 587,
   auth: {
     user: "mkajeiou3@myges.fr",
-    pass: "xsmtpsib-9ad5020ccfe119d9a40e3d3202eca002d76371a4f2a7cd893c6e6c48b4ae348d-m29xWdSbgkwX1KzC\n",
+    pass: "xsmtpsib-9ad5020ccfe119d9a40e3d3202eca002d76371a4f2a7cd893c6e6c48b4ae348d-K0gt3CQc9x7NwXAW",
   }
 });
 
@@ -208,7 +208,8 @@ router.post("/login", async (req, res) => {
       email: result.email,
       pseudo: result.firstname,
       technologies: result.technologies,
-      isAdmin: result.isAdmin
+      isAdmin: result.isAdmin,
+      id: result.id
     });
   } catch (error) {
     res.sendStatus(500);

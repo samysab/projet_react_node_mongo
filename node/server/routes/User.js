@@ -35,6 +35,7 @@ router.get("/checkUser", async (req, res) => {
   try {
     res.status(200);
     res.send({
+      id: req.user.dataValues.id,
       pseudo: req.user.dataValues.firstname,
       email: req.user.dataValues.email,
       technologies: req.user.dataValues.technologies,
