@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useCallback } from "react";
+import React, { Fragment, useEffect, useState, useCallback, useRef } from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie';
 import Button from 'react-bootstrap/Button';
 import { useAuth } from './auth';
 import { Conversation } from "./Conversation";
-const request = new XMLHttpRequest();
+import Modal from 'react-bootstrap/Modal';
 
 export default function Messages() {
 
@@ -16,6 +16,27 @@ export default function Messages() {
 
   const auth = useAuth();
   var cookie = new Cookies();
+  const [idUser, setIdUser] = useState(null);
+
+  const [friends, setFriends] = useState([]);
+
+  useEffect(() => {
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+      if (request.readyState == XMLHttpRequest.DONE) {
+        setFriends(JSON.parse(request.responseText));
+      } else {
+        console.log("error " + request.responseText);
+      }
+    }
+    request.open("GET", 'http://localhost:5000/users', false);
+    request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
+    request.send();
+
+    console.log(JSON.parse(request.responseText));
+  }, [setFriends]);
+
 
   useEffect(() => {
 
@@ -45,6 +66,48 @@ export default function Messages() {
 
 
   }, [value]);
+  const [show, setShow] = useState(false);
+  const [idUserTo, setIdUserTo] = useState(null);
+  const [displayConv, setDisplayConv] = useState("d-none");
+  const handleClose = () => setShow(false);
+  const handleShow = () => (setShow(true));
+  const handledisplay = () => (setDisplayConv());
+
+  const createConv = (e) => {
+    console.log("yesss ", e.target.value);
+    setIdUserTo(e.target.value);
+    handledisplay()
+  }
+
+
+
+
+  const [contentConv, setContentConv] = useState("");
+  const contentRefConv = useRef(null);
+  const updateContentConv = ({ target: { value } }) => setContentConv(value);
+
+  const onFormSubmitConv = event => {
+    const request = new XMLHttpRequest();
+    event.preventDefault();
+    if (contentConv == "") {
+      contentRefConv.current.focus();
+      console.log("Erreur dans le contenu du message");
+    } else {
+
+      request.open("POST", 'http://localhost:5000/messages/', false); //false for synchronous request
+      request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
+      request.setRequestHeader("Content-type", "application/json");
+      request.send(JSON.stringify({
+        "content": contentConv,
+        "status": 1,
+        "from": auth.user.id,
+        "to": idUserTo
+      }));
+      setContentConv("");
+      setDisplayConv("d-none");
+      handleClose()
+    }
+  }
 
   return (
     <Fragment>
@@ -53,9 +116,12 @@ export default function Messages() {
           <Row>
             <Col>
               <h2>Mes Messages</h2>
+              <Button onClick={() => (handleShow())}> Nouvelle conversation</Button>
+              <hr />
               <div id="mesMessages">
                 {
                   nbMessages.map(message => {
+
                     if (auth.user.id != message.from) {
                       return (
                         <div className="d-flex mt-2" key={message.from}>
@@ -77,6 +143,42 @@ export default function Messages() {
             </Col>
           </Row>
         </Row>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Réinitialisation du mot de passe</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="input-group mb-3">
+              <select className="form-control" onChange={createConv}>
+                <option>Choisissez un amis</option>
+                {
+                  friends.map(friend => {
+                    if (friend.id != auth.user.id) {
+                      return (
+                        <option key={friend.id} value={friend.id} onClick={(e) => console.log("eee0")}>{friend.firstname}</option>
+                      );
+                    }
+                  }
+                  )
+                }
+              </select>
+              
+            </div>
+            <form onSubmit={onFormSubmitConv}>
+              <hr/>
+                <Row className={displayConv}>
+                  <input className="form-control" placeholder="Saisir le message" type="text" value={contentConv} onChange={updateContentConv} ref={contentRefConv} />
+                  <p id="errorContent"></p>
+                  <Button variant="primary" type="submit">Envoyer</Button>
+                </Row>
+              </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Fermer
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     </Fragment>
   );

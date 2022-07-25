@@ -73,7 +73,11 @@ function App() {
                     <Friends />
                
             }/>
-
+<Route path="/messages" element={
+               
+               <Message />
+          
+       }/>
 
             <Route path="/confirmation">
                 <Route path=":id" element={<Confirmation />} />
