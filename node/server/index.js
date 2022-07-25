@@ -7,7 +7,8 @@ const PostRouter = require("./routes/Post");
 const MessageRouter = require("./routes/Message");
 const SecurityRouter = require("./routes/Security");
 const checkAuthentication = require("./middlewares/checkAuthentication");
-const cors = require('cors')
+const cors = require('cors');
+const logger = require("./lib/logger");
 
 app.use(express.json());
 const corsOption = {
@@ -26,4 +27,6 @@ app.use("/http-codes", HttpCodesRouter);
 app.use("/users", checkAuthentication, UserRouter);
 app.use("/posts", checkAuthentication, PostRouter);
 
-app.listen(port, () => console.log(`Server started ${port}`));
+app.listen(process.env.PORT, () => {
+  logger.info(`Server started on port ${process.env.PORT}`);
+});
