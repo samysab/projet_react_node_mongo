@@ -17,6 +17,7 @@ import Moderation from "./component/Moderation/Moderation";
 import {CheckAdmin} from "./component/CheckAdmin";
 import UserManagement from "./component/Moderation/UserManagement";
 import ShowUser from "./component/Moderation/ShowUser";
+import MessageManagement from "./component/Moderation/MessageManagement";
 
 function App() {
     return (
@@ -49,6 +50,10 @@ function App() {
 
                 <Route path="/show-user/:id" element={
                     <ShowUser/>
+                }/>
+
+                <Route path="/admin/manage-message" element={
+                    <MessageManagement/>
                 }/>
 
                 <Route path="/confirmation">

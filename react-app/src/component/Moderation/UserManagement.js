@@ -3,6 +3,7 @@ import Sidebar from "./Sidebar";
 import Cookies from "universal-cookie";
 import {Col, Container, Row, Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import {BsFillPencilFill, BsFillPersonPlusFill} from "react-icons/bs";
 
 export default function UserManagement() {
 
@@ -41,6 +42,9 @@ export default function UserManagement() {
                         <Sidebar/>
                     </Col>
                     <Col className="col col-md-8">
+                        <Link className="btn btn-success" to={`/create-user`}>
+                            <BsFillPersonPlusFill/>
+                        </Link>
                         <Table striped bordered hover>
                             <thead>
                             <tr>
@@ -59,6 +63,9 @@ export default function UserManagement() {
                                             </td>
                                             <td>
                                                 <Link className="btn btn-primary" to={`/show-user/${user.id}`}>Voir le profil</Link>
+                                                <Link className="btn btn-warning" to={`/edit-user/${user.id}`}>
+                                                    <BsFillPencilFill/>
+                                                </Link>
                                             </td>
                                         </tr>
 
