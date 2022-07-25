@@ -93,7 +93,7 @@ export default function Messages() {
       contentRefConv.current.focus();
       console.log("Erreur dans le contenu du message");
     } else {
-
+      console.log(" user "+ auth.user.id + " to " + idUserTo);
       request.open("POST", 'http://localhost:5000/messages/', false); //false for synchronous request
       request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
       request.setRequestHeader("Content-type", "application/json");
