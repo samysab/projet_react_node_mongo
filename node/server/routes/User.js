@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { User } = require("../models/postgres");
 const { Relationship } = require("../models/postgres");
+const { Report } = require("../models/postgres");
 
 const { ValidationError, where } = require("sequelize");
 const checkIsAdmin = require("../middlewares/checkIsAdmin");
@@ -130,6 +131,21 @@ router.put("/friend-request/refuse/:id", async (req, res) =>{
 router.post("/follow", async (req, res) => {
   try {
     const result = await Relationship.create(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+});
+
+
+router.post("/report/", async (req, res) => {
+  try {
+    const result = await Report.create(req.body);
     res.status(201).json(result);
   } catch (error) {
     if (error instanceof ValidationError) {
