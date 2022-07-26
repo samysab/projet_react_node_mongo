@@ -89,13 +89,14 @@ router.post("/create-user", async (req, res) => {
             technologies: JSON.stringify(req.body.technologies)
         });
 
-        /*await transporter.sendMail({
+        await transporter.sendMail({
             from: "pa.express.esgi@gmail.com",
             to: email,
             subject: "Création de votre compte",
             text: "Bienvenue sur notre nouveau site",
-            html: `<h2>Bienvenue sur notre nouveau site. Votre mot de passe est le suivant : N'hésitez pas à le changer dans votre profil.</h2>`
-        });*/
+            html: `<h2>Bienvenue sur notre nouveau site. Votre mot de passe est le suivant :` + password + ` N'hésitez pas à le changer dans votre profil.</h2>`
+        });
+
         logger.info(`New user ${email} registered with pseudo: ${firstname}`);
 
         res.status(201).json(result);
