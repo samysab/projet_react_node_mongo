@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import Login from "./component/Login";
 import Register from "./component/Register";
+import Message from "./component/Messages";
 import Profile from "./component/Profile";
 import Users from "./component/Users";
 import FriendRequest from "./component/FriendRequest";
@@ -72,7 +73,11 @@ function App() {
                     <Friends />
                
             }/>
-
+<Route path="/messages" element={
+               
+               <Message />
+          
+       }/>
 
             <Route path="/confirmation">
                 <Route path=":id" element={<Confirmation />} />

@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { Message } = require("../models/postgres");
-const { ValidationError } = require("sequelize");
+const connection = require("../models/postgres/db");
+const { ValidationError, Op, QueryTypes } = require("sequelize");
 
 const router = new Router();
 
@@ -13,12 +14,12 @@ const formatError = (validationError) => {
 
 router.get("/", async (req, res) => {
   try {
-    const { page = 1, perPage = 10, ...criteria } = req.query;
-    const result = await Message.findAll({
-      where: criteria,
-      limit: perPage,
-      offset: (page - 1) * perPage,
-    });
+    const result = await connection.query(
+      "SELECT * from messages m INNER JOIN users u ON m.from = u.id", 
+    { 
+      type: QueryTypes.SELECT
+    }
+    );
     res.json(result);
   } catch (error) {
     res.sendStatus(500);
@@ -58,8 +59,12 @@ router.get("/getAllMessagesPerUser/:id", async (req, res) => {
   try {
     const result = await Message.findAll({
       where: {
-        from: req.params.id,
-      }
+        [Op.or]: [
+          { from: req.params.id },
+          { to: req.params.id }
+        ]
+      },
+      order: [["id", "ASC"]]
     });
     if (!result) {
       res.sendStatus(404);
@@ -72,10 +77,35 @@ router.get("/getAllMessagesPerUser/:id", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  try {
+    const [nbLines, [result]] = await Message.update(req.body, {
+      where: {
+        id: parseInt(req.params.id, 10),
+      },
+      returning: true,
+    });
+    if (!nbLines) {
+      res.sendStatus(404);
+    } else {
+      res.json(result);
+    }
+  } catch (error) {
+    console.log(error);
+
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+});
+
 router.put("/changeStatus/:id", async (req, res) => {
   try {
     const result = await Message.update({
-      status: req.body.status
+      status: 0
     }, {
       where: {
         id: req.params.id,

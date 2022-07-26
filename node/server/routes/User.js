@@ -331,16 +331,14 @@ router.delete("/unfollow/:id", async (req, res) => {
 
 
 
-router.get("/", checkIsAdmin, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const { page = 1, perPage = 10, ...criteria } = req.query;
     const result = await User.findAll({
       where: criteria,
       limit: perPage,
       offset: (page - 1) * perPage,
-      include: [
-        { model: Post, as: "posts", limit: 2, order: [["createdAt", "DESC"]] },
-      ],
+      order: [["id", "ASC"]],
     });
     res.json(result);
   } catch (error) {
@@ -356,7 +354,8 @@ router.get("/checkUser", async (req, res) => {
       id: req.user.dataValues.id,
       pseudo: req.user.dataValues.firstname,
       email: req.user.dataValues.email,
-      technologies: req.user.dataValues.technologies
+      technologies: req.user.dataValues.technologies,
+      id: req.user.dataValues.id
     });
   } catch (error) {
     res.sendStatus(500);
