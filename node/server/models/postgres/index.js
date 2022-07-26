@@ -3,10 +3,15 @@ exports.User = require("./User");
 exports.Post = require("./Post");
 exports.Relationship = require("./Relationship");
 exports.Message = require("./Message");
+exports.Report = require("./Report")
 const { Post: PostMongo } = require("../mongo");
 
 exports.User.hasMany(exports.Post);
 exports.Post.belongsTo(exports.User);
+
+
+exports.User.hasMany(exports.Report);
+exports.Report.belongsTo(exports.User);
 
 exports.User.belongsToMany(exports.User, { as:"following", through: exports.Relationship, foreignKey: "follower" });
 exports.User.belongsToMany(exports.User, { as : "follower", through: exports.Relationship, foreignKey:"following" });
