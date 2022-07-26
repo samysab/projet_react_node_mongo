@@ -92,6 +92,8 @@ router.put("/confirmation", async (req, res) => {
       });
     }
   } catch (error) {
+    logger.error(`Error confirmation account: ${error}`);
+
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
     } else {
