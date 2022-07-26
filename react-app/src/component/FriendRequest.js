@@ -13,6 +13,7 @@ export default function FriendRequest() {
     const auth = useAuth()
     const cookies = new Cookies();
     const [friendsRequest, setFriendsRequest] = useState([]);
+    
 
     useEffect( () => {
 

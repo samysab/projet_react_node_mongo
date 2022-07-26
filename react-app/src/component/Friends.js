@@ -6,11 +6,13 @@ import Col from 'react-bootstrap/Col';
 import NavRelationship from './NavRelationship';
 import Table from 'react-bootstrap/Table';
 import Cookies from 'universal-cookie';
-
+import Modal from 'react-bootstrap/Modal';
+import { Link } from "react-router-dom";
 export default function Friends() {
     
     const cookies = new Cookies();
     const [friends, setFriends] = useState([]);
+
     useEffect( () => {
 
         const request = new XMLHttpRequest();
@@ -49,7 +51,7 @@ export default function Friends() {
                                             <tr key={user.id}>
                                                 <td>{user.firstname}</td>
                                                 <td>
-                                                    <Button size="sm" className="btn-danger">Signaler</Button>
+                                                    <Link className="btn btn-danger" to={`/users/report/user/${user.id}`}>Signaler</Link>
                                                 </td>
                                             </tr>
 

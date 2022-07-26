@@ -2,6 +2,8 @@ const { Router } = require("express");
 const { User } = require("../models/postgres");
 const Post = require("../models/postgres/Post");
 const { Relationship } = require("../models/postgres");
+const { Report } = require("../models/postgres");
+
 const { ValidationError, where } = require("sequelize");
 const checkIsAdmin = require("../middlewares/checkIsAdmin");
 const checkAuthentication = require("../middlewares/checkAuthentication");
@@ -131,6 +133,35 @@ router.post("/follow", async (req, res) => {
   try {
     const result = await Relationship.create(req.body);
     res.status(201).json(result);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
+  }
+});
+
+
+router.post("/report", async (req, res) => {
+  try {
+    const result = await Report.create(req.body);
+
+    if (result[0] === 0) {
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Error',
+      });
+    }else {
+      res.status(201);
+      res.send({
+        success: true,
+        message: 'Success'
+      });
+    }
+    
   } catch (error) {
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
@@ -349,14 +380,21 @@ router.get("/", async (req, res) => {
 
 router.get("/checkUser", async (req, res) => {
   try {
-    res.status(200);
-    res.send({
-      id: req.user.dataValues.id,
-      pseudo: req.user.dataValues.firstname,
-      email: req.user.dataValues.email,
-      technologies: req.user.dataValues.technologies,
-      isAdmin: req.user.dataValues.isAdmin
-    });
+    if (req.user){
+      res.status(200);
+      res.send({
+        id: req.user.dataValues.id,
+        pseudo: req.user.dataValues.firstname,
+        email: req.user.dataValues.email,
+        technologies: req.user.dataValues.technologies,
+        isAdmin: req.user.dataValues.isAdmin
+      });
+    }else{
+      res.status(401);
+      res.send({
+        success: false
+      });
+    }
   } catch (error) {
     res.sendStatus(500);
     console.error(error);
@@ -449,6 +487,24 @@ router.post("/", checkIsAdmin, async (req, res) => {
       res.sendStatus(500);
       console.error(error);
     }
+  }
+});
+
+
+router.get("/user/:id", async (req, res) => {
+  try {
+    const result = await User.findByPk(parseInt(req.params.id, 10));
+    if (!result) {
+      res.status(404);
+      res.send({
+        success: false,
+      });
+    } else {
+      res.json(result);
+    }
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
   }
 });
 
