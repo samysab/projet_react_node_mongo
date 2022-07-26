@@ -116,7 +116,7 @@ export function Conversation({ to, messages }) {
                     {(paraToInput != message.id ? <p id={"message_" + message.id}>{(!message.status || idMessage == message.id ? "/!\\ Ce message a été supprimer" :(contentModified[0] != message.id ? message.content : contentModified[1])  )}</p> : <input value={messageModify} data-id={message.id} onChange={(modifyContent)} onBlur={onBlurModify} ref={modifycontentRef} />)}
                     
                     {(!message.status || idMessage == message.id || auth.user.id != message.from ? "" : <Button onClick={() => setIdMessage(message.id)}>Supprimer</Button>)}
-                    {(message.status || auth.user.id != message.from ? <Button onClick={() => setParaToInput(message.id)}>Modifier</Button> : "" )}
+                    {(message.status && (auth.user.id == message.from || idMessage == message.id)  ? <Button onClick={() => setParaToInput(message.id)}>Modifier</Button> : "" )}
                     
 
                     <br /><small style={{ fontSize: "15px" }} className={(message.from == auth.user.id ? "from-me" : "from-them")}>{( message.createdAt != message.updatedAt ? (modifiedAt[0] == message.id  ? modifiedAt[1] :"Modifié le "+moment(message.updatedAt).format('DD/MM/YYYY hh:mm:ss') ) : moment(message.createdAt).format('DD/MM/YYYY hh:mm:ss')) }</small>

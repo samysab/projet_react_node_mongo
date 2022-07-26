@@ -25,16 +25,15 @@ export default function Messages() {
     const request = new XMLHttpRequest();
     request.onreadystatechange = function () {
       if (request.readyState == XMLHttpRequest.DONE) {
-        setFriends(JSON.parse(request.responseText));
+        setFriends(JSON.parse(request.responseText)[0].following);
       } else {
-        console.log("error " + request.responseText);
+        console.error(request.statusText);
       }
     }
-    request.open("GET", 'http://localhost:5000/users', false);
+    request.open("GET", 'http://localhost:5000/users/friends', false);
     request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
     request.send();
 
-    console.log(JSON.parse(request.responseText));
   }, [setFriends]);
 
 
@@ -64,17 +63,17 @@ export default function Messages() {
     request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
     request.send();
 
-
   }, [value]);
+
   const [show, setShow] = useState(false);
   const [idUserTo, setIdUserTo] = useState(null);
   const [displayConv, setDisplayConv] = useState("d-none");
-  const handleClose = () => setShow(false);
+  const handleClose = () => {setShow(false); setContentConv("");
+  setDisplayConv("d-none")};
   const handleShow = () => (setShow(true));
   const handledisplay = () => (setDisplayConv());
 
   const createConv = (e) => {
-    console.log("yesss ", e.target.value);
     setIdUserTo(e.target.value);
     handledisplay()
   }
@@ -93,7 +92,6 @@ export default function Messages() {
       contentRefConv.current.focus();
       console.log("Erreur dans le contenu du message");
     } else {
-      console.log(" user "+ auth.user.id + " to " + idUserTo);
       request.open("POST", 'http://localhost:5000/messages/', false); //false for synchronous request
       request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
       request.setRequestHeader("Content-type", "application/json");
@@ -103,6 +101,15 @@ export default function Messages() {
         "from": auth.user.id,
         "to": idUserTo
       }));
+      
+      const newConv = {
+        "content": contentConv,
+        "status": 1,
+        "from": auth.user.id,
+        "to": idUserTo
+      }
+      
+      setNbMessages(nbMessages => [...nbMessages, newConv]);
       setContentConv("");
       setDisplayConv("d-none");
       handleClose()
@@ -120,12 +127,12 @@ export default function Messages() {
               <hr />
               <div id="mesMessages">
                 {
-                  nbMessages.map(message => {
+                  friends.map(message => {
 
-                    if (auth.user.id != message.from) {
+                    if (auth.user.id != message.id) {
                       return (
-                        <div className="d-flex mt-2" key={message.from}>
-                          <Button variant="primary" onClick={() => setValue(message.from)}>{message.firstname}</Button>
+                        <div className="d-flex mt-2" key={message.id}>
+                          <Button variant="primary" onClick={() => setValue(message.id)}>{message.firstname}</Button>
                         </div>
                       );
                     }
@@ -145,7 +152,7 @@ export default function Messages() {
         </Row>
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Réinitialisation du mot de passe</Modal.Title>
+            <Modal.Title>Création d'une nouvelle conversation</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="input-group mb-3">
