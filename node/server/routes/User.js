@@ -143,10 +143,24 @@ router.post("/follow", async (req, res) => {
 });
 
 
-router.post("/report/", async (req, res) => {
+router.post("/report", async (req, res) => {
   try {
     const result = await Report.create(req.body);
-    res.status(201).json(result);
+
+    if (result[0] === 0) {
+      res.status(401);
+      res.send({
+        success: false,
+        message: 'Error',
+      });
+    }else {
+      res.status(201);
+      res.send({
+        success: true,
+        message: 'Success'
+      });
+    }
+    
   } catch (error) {
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
@@ -466,6 +480,24 @@ router.post("/", checkIsAdmin, async (req, res) => {
       res.sendStatus(500);
       console.error(error);
     }
+  }
+});
+
+
+router.get("/user/:id", async (req, res) => {
+  try {
+    const result = await User.findByPk(parseInt(req.params.id, 10));
+    if (!result) {
+      res.status(404);
+      res.send({
+        success: false,
+      });
+    } else {
+      res.json(result);
+    }
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
   }
 });
 
