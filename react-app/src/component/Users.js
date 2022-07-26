@@ -84,6 +84,7 @@ export default function Users() {
                                         </td>
                                         <td>
                                             <Link className="btn btn-primary" to={`/users/user/${user.id}`}>Voir le profile</Link>
+                                            <Link className="btn btn-danger mx-2" to={`/users/report/user/${user.id}`}>Signaler</Link>
                                         </td>
                                     </tr> 
                                 
