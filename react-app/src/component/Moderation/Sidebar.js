@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {
     CDBSidebar,
     CDBSidebarContent,
@@ -7,9 +7,23 @@ import {
     CDBSidebarMenu,
     CDBSidebarMenuItem,
     } from 'cdbreact';
-import { NavLink } from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
+import Button from "react-bootstrap/Button";
+import Navbar from "react-bootstrap/Navbar";
+import {useAuth} from "../auth";
 
 const Sidebar = () => {
+    const auth = useAuth();
+    const navigate = useNavigate();
+
+    const logout = useCallback(
+        () => {
+            auth.logout();
+            navigate("/profile", { replace: false });
+        },
+        []
+    );
+
     return (
         <div style={{ display: 'flex', height: '100vh', overflow: 'scroll initial' }}>
             <CDBSidebar textColor="#fff" backgroundColor="#333">
@@ -46,7 +60,7 @@ const Sidebar = () => {
                             padding: '20px 5px',
                         }}
                     >
-                        Sidebar Footer
+                            <CDBSidebarMenuItem variant="primary" onClick={logout}>Déconnexion</CDBSidebarMenuItem>
                     </div>
                 </CDBSidebarFooter>
             </CDBSidebar>

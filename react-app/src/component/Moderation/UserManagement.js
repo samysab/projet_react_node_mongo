@@ -42,7 +42,7 @@ export default function UserManagement() {
                         <Sidebar/>
                     </Col>
                     <Col className="col col-md-8">
-                        <Link className="btn btn-success" to={`/create-user`}>
+                        <Link className="btn btn-success" to={`/admin/create-user`}>
                             <BsFillPersonPlusFill/>
                         </Link>
                         <Table striped bordered hover>
@@ -62,10 +62,10 @@ export default function UserManagement() {
                                                 <p>{user.email}</p>
                                             </td>
                                             <td>
-                                                <Link className="btn btn-primary" to={`/show-user/${user.id}`}>
+                                                <Link className="btn btn-primary" to={`/admin/show-user/${user.id}`}>
                                                     <BsPersonBadgeFill/>
                                                 </Link>
-                                                <Link className="btn btn-warning" to={`/edit-user/${user.id}`}>
+                                                <Link className="btn btn-warning" to={`/admin/edit-user/${user.id}`}>
                                                     <BsFillPencilFill/>
                                                 </Link>
                                             </td>

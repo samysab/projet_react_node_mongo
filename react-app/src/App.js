@@ -23,6 +23,7 @@ import {CheckAdmin} from "./component/CheckAdmin";
 import UserManagement from "./component/Moderation/UserManagement";
 import ShowUser from "./component/Moderation/ShowUser";
 import MessageManagement from "./component/Moderation/MessageManagement";
+import CreateUser from "./component/Moderation/CreateUser";
 
 function App() {
     return (
@@ -81,9 +82,19 @@ function App() {
                     <UserManagement/>
                 }/>
 
-                <Route path="/show-user/:id" element={
+                <Route path="/admin/show-user/:id" element={
                     <ShowUser/>
                 }/>
+
+                <Route path="/admin/edit-user/:id" element={
+                    <ShowUser/>
+                }/>
+
+                <Route path="/admin/create-user" element={
+                    <CreateUser/>
+                }/>
+
+
 
                 <Route path="/admin/manage-message" element={
                     <MessageManagement/>

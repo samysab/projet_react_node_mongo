@@ -96,8 +96,8 @@ export default function ShowUser() {
             body: JSON.stringify({
                 content: message,
                 status: true,
-                from: auth?.user.id,
-                to: user?.id
+                from: auth.user.id,
+                to: user.id
             })
         };
 
@@ -109,7 +109,7 @@ export default function ShowUser() {
                 })
         }
         sendMessage();
-    }, [message]);
+    }, [message, auth, user]);
 
 
     return (
