@@ -7,8 +7,8 @@ import Alert from 'react-bootstrap/Alert';
 import { useParams} from "react-router-dom";
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
-
 import Cookies from 'universal-cookie';
+import { useAuth } from './auth';
 
 const request = new XMLHttpRequest();
 
@@ -19,31 +19,33 @@ const reasons = [
 ];
 
 
-export default function Login() {
+export default function Report() {
     
+    const auth = useAuth()
     const params = useParams();
     const [description, setDescription] = useState('');
     const [reason, setReason] = useState('Harcèlement');
+    const [alertSuccess, setAlertSuccess] = useState(false);
+    const [alertDanger, setAlertDanger] = useState(false);
     const cookies = new Cookies();
 
-    useEffect(() => {
-        // request.open("PUT", 'http://localhost:5000/confirmation', false);
-        // request.setRequestHeader("Content-type", "application/json");
-        // request.send(JSON.stringify({
-        //     "token": params.id,
-        // }));
 
-        // if (JSON.parse(request.response).success === true) {
-        //     setAlertSuccess(true);
-        // }else {
-        //     setAlert(true);
-        // }
-        console.log(reason);
+    useEffect( () =>{
 
-    },
-        [reason]
-    );
+        request.open("GET", `http://localhost:5000/users/user/${params.id}`, false);
+        request.setRequestHeader("Content-type", "application/json");
+        request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
+        request.send();
 
+        if (JSON.parse(request.response).success === false) {
+            window.location.href = "/users/users"
+        }else{
+            if (JSON.parse(request.response).id == auth.user.id){
+                window.location.href = "/users/users"
+            }
+        }
+
+    },[]);
 
     const save = useCallback( () => {
     
@@ -58,6 +60,12 @@ export default function Login() {
                 "userId": params.id,
                 "status" : 0
             }));
+
+            if (JSON.parse(request.response).success === true) {
+                setAlertSuccess(true);
+            }else {
+                setAlertDanger(true);
+            }
         }
 
     }, [reason, description])
@@ -67,6 +75,17 @@ export default function Login() {
             <Container>
                 <Row>
                     <Col>
+
+                    {alertSuccess ?
+                            <Alert key="success" variant="success" className="mt-3">
+                                L'utilisateur a bien été reporté !
+                            </Alert> : ''
+                        }
+                        {alertDanger ?
+                            <Alert key="danger" variant="danger" className="mt-3">
+                                Une erreur est survenue !
+                            </Alert> : ''
+                        }
                     <div className={"d-flex justify-content-center mt-5"}>
                             <Card style={{ width: '25rem' }}>
                                 <Card.Body>

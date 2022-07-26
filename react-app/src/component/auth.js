@@ -1,4 +1,4 @@
-import {useState, createContext, useContext, useEffect} from 'react';
+import {useState, createContext, useContext, useEffect, Fragment} from 'react';
 import Cookies from 'universal-cookie';
 
 const AuthContext = createContext(null);
@@ -7,6 +7,8 @@ const request = new XMLHttpRequest();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+   
+    
 
     const cookies = new Cookies();
 
@@ -37,9 +39,14 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
-            {children}
-        </AuthContext.Provider>
+        <Fragment>
+            { user ?  
+                <AuthContext.Provider value={{ user, login, logout }}>
+                    {children}
+                </AuthContext.Provider> : "" 
+            }
+        </Fragment>
+      
     )
 }
 
