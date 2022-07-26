@@ -6,13 +6,15 @@ const { createToken } = require("../lib/jwt");
 const router = new Router();
 const nodemailer  = require("nodemailer");
 const crypto = require("crypto");
+require('dotenv').config();
+const logger = require("../lib/logger");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp-relay.sendinblue.com",
-  port: 587,
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
   auth: {
-    user: "mkajeiou3@myges.fr",
-    pass: "xsmtpsib-9ad5020ccfe119d9a40e3d3202eca002d76371a4f2a7cd893c6e6c48b4ae348d-K0gt3CQc9x7NwXAW",
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
   }
 });
 
@@ -49,9 +51,12 @@ router.post("/register", async (req, res) => {
         text: "Bienvenue sur notre nouveau site",
         html: `<h2>Bienvenue sur notre nouveau site. Pour confirmer votre compte <a href="${url}">cliquez ici</a>.</h2>`
     });
+    logger.info(`New user ${email} registered with pseudo: ${pseudo}`);
 
     res.status(201).json(result);
   } catch (error) {
+    logger.error(`Register user error: ${error}`);
+
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
     } else {
@@ -127,6 +132,8 @@ router.post("/reset", async (req, res) => {
         html: `<h2>Vous avez fait une demande de réinitialisation de votre mot de passe. Pour le réinitialiser <a href="${url}">cliquez ici</a>.</h2>`
       });
 
+      logger.info(`Reset password send to ${email}`);
+
       res.status(200);
       res.send({
         success: true,
@@ -134,6 +141,8 @@ router.post("/reset", async (req, res) => {
       });
     }
   } catch (error) {
+    logger.error(`Error reset password send to ${req.body.email}: ${error}`);
+
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
     } else {
@@ -169,6 +178,8 @@ router.put("/resetPassword", async (req, res) => {
       });
     }
   } catch (error) {
+    logger.error(`Error reset password: ${error}`);
+
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
     } else {
@@ -187,6 +198,8 @@ router.post("/login", async (req, res) => {
       },
     });
     if (!result) {
+      logger.error(`Email not found for email: ${req.body.email}`);
+
       res.status(401);
       res.send({
         success: false,
@@ -195,6 +208,8 @@ router.post("/login", async (req, res) => {
       return;
     }
     if (!(await bcryptjs.compare(req.body.password, result.password))) {
+      logger.error(`Password is incorrect for email: ${req.body.email}`);
+
       res.status(401);
       res.send({
         success: false,
@@ -202,6 +217,8 @@ router.post("/login", async (req, res) => {
       });
       return;
     }
+
+    logger.info(`User ${result.email} logged in`);
     res.status(200);
     res.json({
       token: await createToken(result),
@@ -212,6 +229,8 @@ router.post("/login", async (req, res) => {
       id: result.id
     });
   } catch (error) {
+    logger.error(`Error login: ${error}`);
+
     res.sendStatus(500);
     console.error(error);
   }

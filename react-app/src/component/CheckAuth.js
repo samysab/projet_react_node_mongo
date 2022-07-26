@@ -7,6 +7,7 @@ export const CheckAuth = ({children}) => {
     if (auth.user) {
        // if (auth.user.isAdmin) return <Navigate to='/admin' state={{path: location.pathname}}/>
         return <Navigate to='/profile' state={{path: location.pathname}}/>
+        //return <Navigate to='/profile' state={{ path: location.pathname }} />
     }
     return children;
 }
