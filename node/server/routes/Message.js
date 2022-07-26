@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const { Message } = require("../models/postgres");
-const { ValidationError } = require("sequelize");
+const connection = require("../models/postgres/db");
+const { ValidationError, Op, QueryTypes } = require("sequelize");
+const logger = require("../lib/logger");
 
 const router = new Router();
 
@@ -13,14 +15,15 @@ const formatError = (validationError) => {
 
 router.get("/", async (req, res) => {
   try {
-    const { page = 1, perPage = 10, ...criteria } = req.query;
-    const result = await Message.findAll({
-      where: criteria,
-      limit: perPage,
-      offset: (page - 1) * perPage,
-    });
+    const result = await connection.query(
+      "SELECT * from messages m INNER JOIN users u ON m.from = u.id", 
+    { 
+      type: QueryTypes.SELECT
+    }
+    );
     res.json(result);
   } catch (error) {
+    logger.error(`Get all messages error: ${error}`);
     res.sendStatus(500);
     console.error(error);
   }
@@ -31,6 +34,7 @@ router.post("/", async (req, res) => {
     const result = await Message.create(req.body);
     res.status(201).json(result);
   } catch (error) {
+    logger.error(`Create new message error : ${error}`);
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
     } else {
@@ -48,7 +52,9 @@ router.get("/:id", async (req, res) => {
     } else {
       res.json(result);
     }
+    logger.info(`GET method respoonse successfuly for id ${req.params.id}`);
   } catch (error) {
+    logger.error(`Impossible to get Message per Id : ${req.params.id} - error : ${error}`);
     console.error(error);
     res.sendStatus(500);
   }
@@ -58,8 +64,12 @@ router.get("/getAllMessagesPerUser/:id", async (req, res) => {
   try {
     const result = await Message.findAll({
       where: {
-        from: req.params.id,
-      }
+        [Op.or]: [
+          { from: req.params.id },
+          { to: req.params.id }
+        ]
+      },
+      order: [["id", "ASC"]]
     });
     if (!result) {
       res.sendStatus(404);
@@ -67,15 +77,40 @@ router.get("/getAllMessagesPerUser/:id", async (req, res) => {
       res.json(result);
     }
   } catch (error) {
+    logger.error(`Get all messages per userId (${req.params.id}) error: ${error}`);
     console.error(error);
     res.sendStatus(500);
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const [nbLines, [result]] = await Message.update(req.body, {
+      where: {
+        id: parseInt(req.params.id, 10),
+      },
+      returning: true,
+    });
+    if (!nbLines) {
+      res.sendStatus(404);
+    } else {
+      res.json(result);
+    }
+  } catch (error) {
+    console.log(error);
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+    } else {
+      res.sendStatus(500);
+      console.error(error);
+    }
   }
 });
 
 router.put("/changeStatus/:id", async (req, res) => {
   try {
     const result = await Message.update({
-      status: req.body.status
+      status: 0
     }, {
       where: {
         id: req.params.id,
@@ -96,6 +131,8 @@ router.put("/changeStatus/:id", async (req, res) => {
       });
     }
   } catch (error) {
+    logger.error(`Change status of message error ${error}`);
+
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
     } else {
@@ -118,6 +155,7 @@ router.delete("/:id", async (req, res) => {
       res.sendStatus(204);
     }
   } catch (error) {
+    logger.error(`Delete message error: ${error}`);
     res.sendStatus(500);
     console.error(error);
   }

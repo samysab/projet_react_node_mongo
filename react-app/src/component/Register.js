@@ -34,12 +34,13 @@ export default function Register() {
         () => {
             if (password === confirmPassword) {
                 request.open("POST", 'http://localhost:5000/register', false);
+                request.setRequestHeader('Accept', 'application/json');
                 request.setRequestHeader("Content-type", "application/json");
                 request.send(JSON.stringify({
-                    "email": email,
-                    "pseudo": pseudo,
-                    "password": password,
-                    "technologies": selected
+                    email: email,
+                    pseudo: pseudo,
+                    password: password,
+                    technologies: selected
                 }));
 
                 if (JSON.parse(request.response).id) {

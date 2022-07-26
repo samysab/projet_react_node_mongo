@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
             }
 
             check()
-        }, []
+        }, [children]
     );
 
     const login = user => {

@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { User } = require("../models/postgres");
+const Post = require("../models/postgres/Post");
 const { Relationship } = require("../models/postgres");
 const { Report } = require("../models/postgres");
 
@@ -361,16 +362,14 @@ router.delete("/unfollow/:id", async (req, res) => {
 
 
 
-router.get("/", checkIsAdmin, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const { page = 1, perPage = 10, ...criteria } = req.query;
     const result = await User.findAll({
       where: criteria,
       limit: perPage,
       offset: (page - 1) * perPage,
-      include: [
-        { model: Post, as: "posts", limit: 2, order: [["createdAt", "DESC"]] },
-      ],
+      order: [["id", "ASC"]],
     });
     res.json(result);
   } catch (error) {
@@ -387,7 +386,8 @@ router.get("/checkUser", async (req, res) => {
         id: req.user.dataValues.id,
         pseudo: req.user.dataValues.firstname,
         email: req.user.dataValues.email,
-        technologies: req.user.dataValues.technologies
+        technologies: req.user.dataValues.technologies,
+        isAdmin: req.user.dataValues.isAdmin
       });
     }else{
       res.status(401);
@@ -395,7 +395,6 @@ router.get("/checkUser", async (req, res) => {
         success: false
       });
     }
-   
   } catch (error) {
     res.sendStatus(500);
     console.error(error);
