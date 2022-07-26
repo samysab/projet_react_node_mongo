@@ -5,6 +5,7 @@ const HttpCodesRouter = require("./routes/HttpCode");
 const UserRouter = require("./routes/User");
 const PostRouter = require("./routes/Post");
 const MessageRouter = require("./routes/Message");
+const AdminRouter = require("./routes/Admin")
 const SecurityRouter = require("./routes/Security");
 const checkAuthentication = require("./middlewares/checkAuthentication");
 const cors = require('cors');
@@ -26,6 +27,7 @@ app.use("/messages", checkAuthentication, MessageRouter);
 app.use("/http-codes", HttpCodesRouter);
 app.use("/users", checkAuthentication, UserRouter);
 app.use("/posts", checkAuthentication, PostRouter);
+app.use("/admin", AdminRouter);
 
 app.listen(process.env.PORT, () => {
   logger.info(`Server started on port ${process.env.PORT}`);

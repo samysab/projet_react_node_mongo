@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { User } = require("../models/postgres");
+const Post = require("../models/postgres/Post");
 const { Relationship } = require("../models/postgres");
-
 const { ValidationError, where } = require("sequelize");
 const checkIsAdmin = require("../middlewares/checkIsAdmin");
 const checkAuthentication = require("../middlewares/checkAuthentication");
@@ -355,7 +355,7 @@ router.get("/checkUser", async (req, res) => {
       pseudo: req.user.dataValues.firstname,
       email: req.user.dataValues.email,
       technologies: req.user.dataValues.technologies,
-      id: req.user.dataValues.id
+      isAdmin: req.user.dataValues.isAdmin
     });
   } catch (error) {
     res.sendStatus(500);

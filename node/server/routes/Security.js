@@ -227,6 +227,8 @@ router.post("/login", async (req, res) => {
       email: result.email,
       pseudo: result.firstname,
       technologies: result.technologies,
+      isAdmin: result.isAdmin,
+      id: result.id
     });
   } catch (error) {
     logger.error(`Error login: ${error}`);
