@@ -20,8 +20,12 @@ export const AuthProvider = ({ children }) => {
                 request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));
                 request.send();
 
-                if (request.response !== 'Unauthorized') {
+
+                if (request.response !== 'Unauthorized' && JSON.parse(request.response).success != false) {
                     login(JSON.parse(request.response));
+                   
+                }else{
+                    login({success:false})
                 }
             }
 

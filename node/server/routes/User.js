@@ -381,13 +381,21 @@ router.get("/", checkIsAdmin, async (req, res) => {
 
 router.get("/checkUser", async (req, res) => {
   try {
-    res.status(200);
-    res.send({
-      id: req.user.dataValues.id,
-      pseudo: req.user.dataValues.firstname,
-      email: req.user.dataValues.email,
-      technologies: req.user.dataValues.technologies
-    });
+    if (req.user){
+      res.status(200);
+      res.send({
+        id: req.user.dataValues.id,
+        pseudo: req.user.dataValues.firstname,
+        email: req.user.dataValues.email,
+        technologies: req.user.dataValues.technologies
+      });
+    }else{
+      res.status(401);
+      res.send({
+        success: false
+      });
+    }
+   
   } catch (error) {
     res.sendStatus(500);
     console.error(error);
