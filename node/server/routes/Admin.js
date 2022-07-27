@@ -1,11 +1,12 @@
 const {Router} = require("express");
 const {User, Report} = require("../models/postgres");
-const {ValidationError} = require("sequelize");
+const {ValidationError, QueryTypes} = require("sequelize");
 const checkIsAdmin = require("../middlewares/checkIsAdmin");
 const Message = require("../models/postgres/Message");
 const crypto = require("crypto");
 const logger = require("../lib/logger");
 const nodemailer = require("nodemailer");
+const connection = require("../models/postgres/db");
 
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
@@ -193,6 +194,36 @@ router.put("/delete-message/:id", async (req, res) => {
     }
 });
 
+router.put("/delete-report/:id", async (req, res) => {
+    try {
+        const result = await Report.update(
+            {
+                status: req.body.status
+            }, {
+                where: {
+                    id: parseInt(req.params.id, 10),
+                },
+                returning: true,
+            });
+
+        if (!result) {
+            res.sendStatus(404);
+        } else {
+            res.json(result);
+        }
+
+    } catch (error) {
+        console.log(error);
+
+        if (error instanceof ValidationError) {
+            res.status(422).json(formatError(error));
+        } else {
+            res.sendStatus(500);
+            console.error(error);
+        }
+    }
+});
+
 router.get("/manage-messages", async (req, res) => {
     res.send("Hello admin");
 });
@@ -241,6 +272,23 @@ router.put("/filed-away/:id", async (req, res) => {
         }
     }
 });
+
+router.get("/reports", async (req, res) => {
+    try {
+        const result = await connection.query(
+            "SELECT * from Reports;",
+            {
+                type: QueryTypes.SELECT
+            }
+        );
+        res.json(result);
+    } catch (error) {
+        logger.error(`Get all messages error: ${error}`);
+        res.sendStatus(500);
+        console.error(error);
+    }
+});
+
 
 
 module.exports = router;
