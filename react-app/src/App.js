@@ -19,15 +19,14 @@ import Report from "./component/Report";
 import Menu from "./component/Menu";
 import {AuthProvider} from './component/auth';
 import {RequireAuth} from './component/RequireAuth';
-import {CheckAuth} from './component/CheckAuth';
 import Moderation from "./component/Moderation/Moderation";
 import {CheckAdmin} from "./component/CheckAdmin";
 import UserManagement from "./component/Moderation/UserManagement";
+import ReportManager from "./component/Moderation/ReportManager";
 import ShowUser from "./component/Moderation/ShowUser";
 import MessageManagement from "./component/Moderation/MessageManagement";
 import CreateUser from "./component/Moderation/CreateUser";
 import EditUser from "./component/Moderation/EditUser";
-import ReportManager from "./component/Moderation/ReportManager";
 
 function App() {
 
@@ -35,73 +34,98 @@ function App() {
         <AuthProvider>
             <Menu/>
             <Routes>
-                <Route path="/" element={
-                        <Login/>
-                }/>
-                <Route path="/register" element={
-                        <Register/>
-                }/>
+                <Route path="/" element={<Login/>}/>
+                <Route path="/register" element={<Register/>}/>
 
                 <Route path="/profile" element={
+                    <RequireAuth>
                         <Profile/>
+                    </RequireAuth>
                 }/>
 
                 <Route path="/users/users" element={
-                    <Users/>
+                    <RequireAuth>
+                        <Users/>
+                    </RequireAuth>
                 }/>
 
                 <Route path="/users/user/">
-                    <Route path=":id" element={ <User />} />
+                    <RequireAuth>
+                        <Route path=":id" element={ <User />} />
+                    </RequireAuth>
                 </Route>
-
                 
                 <Route path="/users/report/user/">
-                    <Route path=":id" element={ <Report />} />
+                    <RequireAuth>
+                        <Route path=":id" element={ <Report />} />
+                    </RequireAuth>
                 </Route>
 
                 <Route path="/users/send-invitation" element={
-                    <InvitationSent/>
+                    <RequireAuth>
+                        <InvitationSent/>
+                    </RequireAuth>
                 }/>
 
                 <Route path="/users/friend-request" element={
-                    <FriendRequest/>
+                    <RequireAuth>
+                        <FriendRequest/>
+                    </RequireAuth>
                 }/>
 
                 <Route path="/users/friends" element={
-                    <Friends/>
+                    <RequireAuth>
+                        <Friends/>
+                    </RequireAuth>
                 }/>
 
                 <Route path="/messages" element={
-                    <Message/>
+                    <RequireAuth>
+                        <Message/>
+                    </RequireAuth>
                 }/>
 
               
                 <Route path="/admin" element={
-                    <Moderation/>
+                    <CheckAdmin>
+                        <Moderation/>
+                    </CheckAdmin>
                 }/>
 
                 <Route path="/admin/manage-user" element={
-                    <UserManagement/>
+                    <CheckAdmin>
+                        <UserManagement/>
+                    </CheckAdmin>
                 }/>
 
                 <Route path="/admin/show-user/:id" element={
-                    <ShowUser/>
+                    <CheckAdmin>
+                        <ShowUser/>
+                    </CheckAdmin>
                 }/>
 
                 <Route path="/admin/manage-reports" element={
-                    <ReportManager/>
+                    <CheckAdmin>
+                        <ReportManager/>
+                    </CheckAdmin>
                 }/>
 
                 <Route path="/admin/edit-user/:id" element={
-                    <EditUser/>
+                    <CheckAdmin>
+                        <EditUser/>
+                    </CheckAdmin>
                 }/>
 
                 <Route path="/admin/create-user" element={
-                    <CreateUser/>
+                    <CheckAdmin>
+                        <CreateUser/>
+                    </CheckAdmin>
                 }/>
 
                 <Route path="/admin/manage-message" element={
-                    <MessageManagement/>
+                    <CheckAdmin>
+                        <MessageManagement/>
+                    </CheckAdmin>
                 }/>
 
                 <Route path="/confirmation">
