@@ -56,6 +56,27 @@ export default function MessageManagement() {
         deleteUser();
     }, []);
 
+    const deleteMessage = useCallback((id) => {
+        myHeaders.set('Accept', 'application/json');
+        myHeaders.set('Content-Type', 'application/json');
+        const deleteUserHeaders = {
+            method: 'PUT',
+            headers: myHeaders,
+            mode: 'cors',
+            cache: 'default',
+            body: JSON.stringify({status: "-2"})
+        };
+        const deleteUser = () => {
+            fetch(`http://localhost:5000/admin/delete-message/${id}`, deleteUserHeaders)
+                .then(res => res.json())
+                .then(data => {
+                    setStatus(data.status);
+                    setStatusText(data.statusText);
+                })
+        }
+        deleteUser();
+    }, []);
+
     return (
         <Fragment>
             <Container className="m-0">
@@ -86,8 +107,7 @@ export default function MessageManagement() {
                                                 <p>To : {message.userto}</p>
                                             </td>
                                             <td>
-                                                <Button onClick={() => {
-                                                }} className="btn btn-danger">
+                                                <Button onClick={() => deleteMessage(message.idmess)} className="btn btn-danger">
                                                     <BsFillTrashFill/>
                                                 </Button>
                                                 <Button onClick={() => ban(message.from)} className="btn btn-warning">
