@@ -257,7 +257,8 @@ router.get("/users", async (req, res) => {
       where: {
         id: {
           [Op.ne]: req.user.dataValues.id
-        }
+        },
+        status : 1
       },
       include: [
         {

@@ -85,6 +85,10 @@ function App() {
                     <ShowUser/>
                 }/>
 
+                <Route path="/admin/manage-reports" element={
+                    <ReportManager/>
+                }/>
+
                 <Route path="/admin/edit-user/:id" element={
                     <EditUser/>
                 }/>
