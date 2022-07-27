@@ -14,7 +14,7 @@ Message.init(
       },
     },
     status: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: true,
     },

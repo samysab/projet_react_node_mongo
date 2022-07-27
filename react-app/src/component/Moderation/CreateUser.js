@@ -23,8 +23,8 @@ const optionsisAdmin = [
 ];
 
 const optionsisActive = [
-    {label: "Activer le compte", value: "0"},
-    {label: "Désactiver", value: "1"},
+    {label: "Activer le compte", value: "1"},
+    {label: "Désactiver", value: "0"},
 ];
 
 const request = new XMLHttpRequest();

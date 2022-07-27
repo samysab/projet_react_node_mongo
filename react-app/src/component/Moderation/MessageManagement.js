@@ -1,12 +1,15 @@
 import React, {Fragment, useCallback, useEffect, useState} from "react";
 import Sidebar from "./Sidebar";
 import Cookies from "universal-cookie";
-import {Col, Row, Table} from "react-bootstrap";
+import {Col, Container, Row, Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
 
 export default function MessageManagement() {
 
     const [messages, setMessages] = useState([]);
+    const [userFrom, setUserFrom] = useState([]);
+    const [user, setUser] = useState([]);
+    const [userTo, setUserTo] = useState([]);
     const [status, setStatus] = useState(0);
     const [statusText, setStatusText] = useState("");
     const cookies = new Cookies();
@@ -32,43 +35,50 @@ export default function MessageManagement() {
                 .then((data) => setMessages(data));
         };
         fetchData();
-    }, []);
+        console.log(messages);
+        }, []);
 
     return (
         <Fragment>
-            <Row>
-                <Col className="col col-md-4">
-                    <Sidebar/>
-                </Col>
-                <Col className="col col-md-8">
-                    <Table striped bordered hover>
-                        <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            messages.map( message => {
-                                return (
-                                    <tr key={message.id}>
-                                        <td>
-                                            <p>{message.id}</p>
-                                            <p>{message.content}</p>
-                                        </td>
-                                        <td>
-                                            <Link className="btn btn-primary" to={`/show-user/${message.id}`}>Voir le profil</Link>
-                                        </td>
-                                    </tr>
+            <Container className="m-0">
+                <Row>
+                    <Col className={"p-0"} md={3}>
+                        <Sidebar/>
+                    </Col>
+                    <Col md={9}>
+                        <Table striped bordered hover>
+                            <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                messages.map(message => {
+                                    console.log(messages);
+                                    return (
+                                        <tr key={message.id}>
+                                            <td>
+                                                <p>{message.id}</p>
+                                                <p>{message.content}</p>
+                                                <p>From : {message.userfrom}</p>
+                                                <p>To : {message.userto}</p>
+                                            </td>
+                                            <td>
+                                                <Link className="btn btn-primary" to={`/show-message/${message.id}`}>Voir
+                                                    le message</Link>
+                                            </td>
+                                        </tr>
 
-                                );
-                            })
-                        }
-                        </tbody>
-                    </Table>
-                </Col>
-            </Row>
+                                    );
+                                })
+                            }
+                            </tbody>
+                        </Table>
+                    </Col>
+                </Row>
+            </Container>
         </Fragment>
     );
 }

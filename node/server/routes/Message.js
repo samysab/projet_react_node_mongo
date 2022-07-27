@@ -16,7 +16,7 @@ const formatError = (validationError) => {
 router.get("/", async (req, res) => {
   try {
     const result = await connection.query(
-      "SELECT * from messages m INNER JOIN users u ON m.from = u.id", 
+      "SELECT *, a.firstname as userto, u.firstname as userfrom from messages m INNER JOIN users u ON m.from = u.id INNER JOIN users a ON m.to = a.id",
     { 
       type: QueryTypes.SELECT
     }
