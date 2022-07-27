@@ -5,10 +5,12 @@ import {Alert, Button, Card, Col, Row} from "react-bootstrap";
 import {Link, useParams} from "react-router-dom";
 import {BsFillPersonXFill, BsFillTrashFill, BsTelegram} from "react-icons/bs";
 import {useAuth} from "../auth";
+import "react-chat-elements/dist/main.css";
+import {MessageBox, MessageList} from "react-chat-elements";
 
 export default function ShowUser() {
 
-    let [user, setUser] = useState([]);
+    const [user, setUser] = useState([]);
     const [status, setStatus] = useState(0);
     const [statusText, setStatusText] = useState("");
     const [message, setMessage] = useState("");
@@ -16,6 +18,8 @@ export default function ShowUser() {
     const cookies = new Cookies();
     const params = useParams();
     const auth = useAuth();
+    const [messages, setMessages] = useState([]);
+
 
     const onFormSubmit = event => {
         setAlert("Message : '" + message + "' envoyé à " + user.firstname + " " + user.email);
@@ -113,6 +117,26 @@ export default function ShowUser() {
     }, [message, auth, user]);
 
 
+    const myInit2 = {
+        method: 'GET',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default'
+    };
+
+    useEffect(() => {
+        const fetchData = () => {
+            fetch(`http://localhost:5000/messages`, myInit2)
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => setMessages(data));
+        };
+        fetchData();
+    }, []);
+
+    console.log(messages);
+
     return (
         <Fragment>
             <Row>
@@ -124,7 +148,8 @@ export default function ShowUser() {
                         <Card.Body>
                             <Card.Title>{user?.firstname}</Card.Title>
                             <Card.Subtitle className="mb-2 text-muted">{user?.email}</Card.Subtitle>
-                            <Card.Subtitle className="mb-2 text-muted">{user?.isAdmin ? "Administrateur" : "Utilisateur standard" }</Card.Subtitle>
+                            <Card.Subtitle
+                                className="mb-2 text-muted">{user?.isAdmin ? "Administrateur" : "Utilisateur standard"}</Card.Subtitle>
                             <Button onClick={() => deactivate()} className="btn btn-danger">
                                 <BsFillTrashFill/>
                             </Button>
@@ -133,11 +158,36 @@ export default function ShowUser() {
                             </Button>
 
                             <Card.Title>Envoyer un message</Card.Title>
-                            {   alert !== "" && status === 201?
+                            {alert !== "" && status === 201 ?
                                 <Alert key="success" variant="success" className="mt-1">
                                     {alert}
                                 </Alert> : ''
                             }
+
+                            <div>
+
+                                {
+                                    messages.map(message => {
+                                        return (
+                                            <MessageList
+                                                className='message-list'
+                                                lockable={true}
+                                                toBottomHeight={'100%'}
+                                                dataSource={
+                                                    [
+                                                        {
+                                                            position: message.from === auth.user.id ? "right" : "left",
+                                                            type: "text",
+                                                            title:  message.from === auth.user.id ? message.userfrom : message.userto,
+                                                            text: message.content
+                                                        },
+                                                    ]}
+                                            />
+                                        )
+                                    })
+                                }
+
+                            </div>
                             <form onSubmit={onFormSubmit}>
                                 <input onChange={(e) => {
                                     setMessage(e.target.value);

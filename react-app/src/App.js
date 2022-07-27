@@ -35,20 +35,14 @@ function App() {
             <Menu/>
             <Routes>
                 <Route path="/" element={
-                    <CheckAuth>
                         <Login/>
-                    </CheckAuth>
                 }/>
                 <Route path="/register" element={
-                    <CheckAuth>
                         <Register/>
-                    </CheckAuth>
                 }/>
 
                 <Route path="/profile" element={
-                    <RequireAuth>
                         <Profile/>
-                    </RequireAuth>
                 }/>
 
                 <Route path="/users/users" element={
