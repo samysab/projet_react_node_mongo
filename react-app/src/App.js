@@ -34,16 +34,8 @@ function App() {
         <AuthProvider>
             <Menu/>
             <Routes>
-                <Route path="/" element={
-                    <CheckAuth>
-                        <Login/>
-                    </CheckAuth>
-                }/>
-                <Route path="/register" element={
-                    <CheckAuth>
-                        <Register/>
-                    </CheckAuth>
-                }/>
+                <Route path="/" element={<Login/>}/>
+                <Route path="/register" element={<Register/>}/>
 
                 <Route path="/profile" element={
                     <RequireAuth>

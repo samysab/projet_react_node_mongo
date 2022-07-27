@@ -6,7 +6,7 @@ const request = new XMLHttpRequest();
 
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({success:false});
    
     
 
@@ -24,8 +24,6 @@ export const AuthProvider = ({ children }) => {
                 if (request.response !== 'Unauthorized' && JSON.parse(request.response).success !== false) {
                     login(JSON.parse(request.response));
                    
-                }else{
-                    login({success:false})
                 }
             }
 
@@ -38,7 +36,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const logout = () => {
-        setUser(null);
+        setUser({success:false});
         cookies.remove('token');
     }
 
