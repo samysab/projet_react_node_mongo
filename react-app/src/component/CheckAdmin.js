@@ -4,7 +4,7 @@ import { useAuth } from './auth';
 export const CheckAdmin = ({ children }) => {
     const location = useLocation();
     const auth = useAuth();
-    if (!auth.user.isAdmin || !auth.user.success) {
+    if (!auth.user.isAdmin || auth.user.success === false) {
         return <Navigate to='/' state={{ path: location.pathname }} />
     }
     return children;

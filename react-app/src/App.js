@@ -49,16 +49,16 @@ function App() {
                     </RequireAuth>
                 }/>
 
-                <Route path="/users/user/">
-                    <RequireAuth>
+                <Route element={<RequireAuth />}>
+                    <Route path="/users/user/">
                         <Route path=":id" element={ <User />} />
-                    </RequireAuth>
+                    </Route>
                 </Route>
-                
-                <Route path="/users/report/user/">
-                    <RequireAuth>
+
+                <Route element={<RequireAuth />}>
+                    <Route path="/users/report/user/">
                         <Route path=":id" element={ <Report />} />
-                    </RequireAuth>
+                    </Route>
                 </Route>
 
                 <Route path="/users/send-invitation" element={
@@ -85,7 +85,7 @@ function App() {
                     </RequireAuth>
                 }/>
 
-              
+
                 <Route path="/admin" element={
                     <CheckAdmin>
                         <Moderation/>

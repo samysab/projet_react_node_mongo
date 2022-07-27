@@ -6,9 +6,7 @@ const request = new XMLHttpRequest();
 
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState({success:false});
-   
-    
+    const [user, setUser] = useState(null);
 
     const cookies = new Cookies();
 
@@ -20,10 +18,10 @@ export const AuthProvider = ({ children }) => {
                 request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));
                 request.send();
 
-
                 if (request.response !== 'Unauthorized' && JSON.parse(request.response).success !== false) {
                     login(JSON.parse(request.response));
-                   
+                }else{
+                    login({success:false});
                 }
             }
 
@@ -32,6 +30,7 @@ export const AuthProvider = ({ children }) => {
     );
 
     const login = user => {
+        // console.log(user);
         setUser(user);
     }
 
@@ -42,7 +41,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <Fragment>
-            { user ?  
+            { user ?
                 <AuthContext.Provider value={{ user, login, logout }}>
                     {children}
                 </AuthContext.Provider> : "" 

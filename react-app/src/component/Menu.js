@@ -14,14 +14,14 @@ export default function Menu() {
     const logout = useCallback(
         () => {
             auth.logout();
-            navigate("/profile", { replace: false });
+            navigate("/", { replace: false });
         },
         []
     );
 
     return (
         <Fragment>
-            {auth.user ?
+            {auth.user && auth.user.success !== false ?
                 <Navbar bg="light" expand="lg">
                     <Container>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -29,6 +29,18 @@ export default function Menu() {
                             <Nav className="me-auto">
                                 <Link to={'/profile'} className={"nav-link"}>Profile</Link>
                             </Nav>
+                            <Nav className="me-auto">
+                                <Link to={'/users/users'} className={"nav-link"}>Amis</Link>
+                            </Nav>
+                            <Nav className="me-auto">
+                                <Link to={'/messages'} className={"nav-link"}>Messages</Link>
+                            </Nav>
+                            {auth.user.isAdmin ?
+                                <Nav className="me-auto">
+                                    <Link to={'/admin'} className={"nav-link"}>Administration</Link>
+                                </Nav>
+                                : ""
+                            }
                             <Navbar.Text>
                                 <Button variant="primary" onClick={logout}>Déconnexion</Button>
                             </Navbar.Text>
