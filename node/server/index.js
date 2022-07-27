@@ -13,7 +13,7 @@ const logger = require("./lib/logger");
 
 app.use(express.json());
 const corsOption = {
-  origin: ['http://localhost:3000'],
+  origin: ['http://mlkchess.fr:3000'],
 };
 app.use(cors(corsOption));
 
