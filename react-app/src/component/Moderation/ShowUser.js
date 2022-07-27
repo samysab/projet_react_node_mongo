@@ -63,7 +63,7 @@ export default function ShowUser() {
         };
         const deleteUser = () => {
             fetch(`http://localhost:5000/admin/delete-user/${params.id}`, deleteUserHeaders)
-                .then(x => console.log(x))
+                .then(x => x.json())
         }
         deleteUser();
     }, []);
@@ -169,6 +169,7 @@ export default function ShowUser() {
                                 {
                                     messages.map(message => {
                                         return (
+                                            message.from === auth.user.id && message.to === parseInt(params.id,10) ?
                                             <MessageList
                                                 className='message-list'
                                                 lockable={true}
@@ -182,7 +183,7 @@ export default function ShowUser() {
                                                             text: message.content
                                                         },
                                                     ]}
-                                            />
+                                            /> : ''
                                         )
                                     })
                                 }
