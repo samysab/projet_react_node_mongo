@@ -15,6 +15,7 @@ import InvitationSent from './component/InvitationSent';
 import Confirmation from "./component/Confirmation";
 import Reset from "./component/Reset";
 import Error404 from "./component/404";
+import Report from "./component/Report";
 import Menu from "./component/Menu";
 import {AuthProvider} from './component/auth';
 import {RequireAuth} from './component/RequireAuth';
@@ -28,6 +29,7 @@ import CreateUser from "./component/Moderation/CreateUser";
 import EditUser from "./component/Moderation/EditUser";
 
 function App() {
+
     return (
         <AuthProvider>
             <Menu/>
@@ -53,9 +55,14 @@ function App() {
                     <Users/>
                 }/>
 
-                <Route path="/users/user/:id" element={
-                    <User/>
-                }/>
+                <Route path="/users/user/">
+                    <Route path=":id" element={ <User />} />
+                </Route>
+
+                
+                <Route path="/users/report/user/">
+                    <Route path=":id" element={ <Report />} />
+                </Route>
 
                 <Route path="/users/send-invitation" element={
                     <InvitationSent/>
@@ -73,22 +80,7 @@ function App() {
                     <Message/>
                 }/>
 
-                <Route path="/confirmation">
-                    <Route path=":id" element={<Confirmation/>}/>
-                </Route>
-
-                <Route path="/resetPassword">
-                    <Route path=":id" element={<Reset/>}/>
-                </Route>
-
-                <Route path="/confirmation">
-                    <Route path=":id" element={<Confirmation/>}/>
-                </Route>
-
-                <Route path="/resetPassword">
-                    <Route path=":id" element={<Reset/>}/>
-                </Route>
-
+              
                 <Route path="/admin" element={
                     <Moderation/>
                 }/>
@@ -125,6 +117,7 @@ function App() {
             </Routes>
         </AuthProvider>
     );
+
 }
 
 export default App;
