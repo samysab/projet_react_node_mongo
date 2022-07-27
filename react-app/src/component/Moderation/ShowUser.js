@@ -135,8 +135,6 @@ export default function ShowUser() {
         fetchData();
     }, []);
 
-    console.log(messages);
-
     return (
         <Fragment>
             <Row>
@@ -169,7 +167,7 @@ export default function ShowUser() {
                                 {
                                     messages.map(message => {
                                         return (
-                                            message.from === auth.user.id && message.to === parseInt(params.id,10) ?
+                                            message.to === parseInt(params.id) ?
                                             <MessageList
                                                 className='message-list'
                                                 lockable={true}
@@ -183,7 +181,7 @@ export default function ShowUser() {
                                                             text: message.content
                                                         },
                                                     ]}
-                                            /> : ''
+                                            /> : ""
                                         )
                                     })
                                 }
