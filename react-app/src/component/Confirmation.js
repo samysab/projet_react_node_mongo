@@ -15,7 +15,7 @@ export default function Login() {
     const [alert, setAlert] = useState(false);
 
     useEffect(() => {
-        request.open("PUT", 'http://localhost:5000/confirmation', false);
+        request.open("PUT", 'http://mlkchess.fr:5000/confirmation', false);
         request.setRequestHeader("Content-type", "application/json");
         request.send(JSON.stringify({
             "token": params.id,

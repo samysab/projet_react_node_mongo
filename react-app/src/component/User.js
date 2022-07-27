@@ -33,7 +33,7 @@ export default function User() {
                 setFollowing(JSON.parse(request.responseText));
             }
         }
-        request.open( "GET", `http://localhost:5000/users/user/following/${params.id}`, false );
+        request.open( "GET", `http://mlkchess.fr:5000/users/user/following/${params.id}`, false );
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
     }, [action]);
@@ -45,7 +45,7 @@ export default function User() {
                 setFollower(JSON.parse(request.responseText));
             }
         }
-        request.open( "GET", `http://localhost:5000/users/user/follower/${params.id}`, false );
+        request.open( "GET", `http://mlkchess.fr:5000/users/user/follower/${params.id}`, false );
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
     }, [action]);
@@ -53,12 +53,12 @@ export default function User() {
     const accept = useCallback ( (id) =>{
 
         const request = new XMLHttpRequest();
-        request.open( "PUT", `http://localhost:5000/users/friend-request/accept/${id}`, false ); 
+        request.open( "PUT", `http://mlkchess.fr:5000/users/friend-request/accept/${id}`, false );
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
 
-        request.open( "POST", `http://localhost:5000/users/follow`, false ); 
+        request.open( "POST", `http://mlkchess.fr:5000/users/follow`, false );
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send(JSON.stringify({
@@ -73,7 +73,7 @@ export default function User() {
 
     const refuse = useCallback ( (id) => {
         const request = new XMLHttpRequest();
-        request.open( "PUT", `http://localhost:5000/users/friend-request/refuse/${id}`, false ); 
+        request.open( "PUT", `http://mlkchess.fr:5000/users/friend-request/refuse/${id}`, false );
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
@@ -84,7 +84,7 @@ export default function User() {
 
     const follow = useCallback( () => {
         const request = new XMLHttpRequest();
-        request.open( "POST", `http://localhost:5000/users/follow`, false ); 
+        request.open( "POST", `http://mlkchess.fr:5000/users/follow`, false );
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send(JSON.stringify({
@@ -101,12 +101,12 @@ export default function User() {
     const unfollow = useCallback( (rFollowerId, rFollowingId) => {
 
         const request = new XMLHttpRequest();
-        request.open( "DELETE", `http://localhost:5000/users/unfollow/${rFollowerId}`, false ); 
+        request.open( "DELETE", `http://mlkchess.fr:5000/users/unfollow/${rFollowerId}`, false );
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZmlyc3RuYW1lIjoiT0siLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjU2NDkzMzU3LCJleHAiOjE2ODgwNTA5NTd9.ym_SMV8gM8tTWp1bFTSPaf_DREdhfKTk2gHi72mwfMs');
         request.send();
 
-        request.open( "DELETE", `http://localhost:5000/users/unfollow/${rFollowingId}`, false ); 
+        request.open( "DELETE", `http://mlkchess.fr:5000/users/unfollow/${rFollowingId}`, false );
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();

@@ -21,7 +21,7 @@ export default function Friends() {
                 setFriends(JSON.parse(request.responseText)[0].following);
             }
         }
-        request.open( "GET", 'http://localhost:5000/users/friends', false );
+        request.open( "GET", 'http://mlkchess.fr:5000/users/friends', false );
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
 

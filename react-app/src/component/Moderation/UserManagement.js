@@ -24,7 +24,7 @@ export default function UserManagement() {
 
     useEffect(() => {
         const fetchData = () => {
-            fetch(`http://localhost:5000/users`, myInit)
+            fetch(`http://mlkchess.fr:5000/users`, myInit)
                 .then((response) => {
                     setStatus(response.status);
                     setStatusText(response.statusText);

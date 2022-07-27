@@ -24,7 +24,7 @@ export default function MessageManagement() {
 
     useEffect(() => {
         const fetchData = () => {
-            fetch(`http://localhost:5000/messages`, myInit)
+            fetch(`http://mlkchess.fr:5000/messages`, myInit)
                 .then((response) => {
                     setStatus(response.status);
                     setStatusText(response.statusText);
@@ -46,7 +46,7 @@ export default function MessageManagement() {
             body: JSON.stringify({status: "-2"})
         };
         const deleteUser = () => {
-            fetch(`http://localhost:5000/admin/delete-user/${id}`, deleteUserHeaders)
+            fetch(`http://mlkchess.fr:5000/admin/delete-user/${id}`, deleteUserHeaders)
                 .then(res => res.json())
                 .then(data => {
                     setStatus(data.status);
@@ -67,7 +67,7 @@ export default function MessageManagement() {
             body: JSON.stringify({status: "-2"})
         };
         const deleteUser = () => {
-            fetch(`http://localhost:5000/admin/delete-message/${id}`, deleteUserHeaders)
+            fetch(`http://mlkchess.fr:5000/admin/delete-message/${id}`, deleteUserHeaders)
                 .then(res => res.json())
                 .then(data => {
                     setStatus(data.status);

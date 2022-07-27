@@ -20,7 +20,7 @@ export default function InvitationSent() {
                 setInvitationSent(JSON.parse(request.responseText));
             }
         }
-        request.open( "GET", 'http://localhost:5000/users/invitation-sent', false );
+        request.open( "GET", 'http://mlkchess.fr:5000/users/invitation-sent', false );
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
 

@@ -41,7 +41,7 @@ export default function Profile() {
 
     const update = useCallback(
         () => {
-            request.open("PUT", 'http://localhost:5000/users/updateProfile', false); //false for synchronous request
+            request.open("PUT", 'http://mlkchess.fr:5000/users/updateProfile', false); //false for synchronous request
             request.setRequestHeader("Content-type", "application/json");
             request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));
             request.send(JSON.stringify({
@@ -65,7 +65,7 @@ export default function Profile() {
     const updatePassword = useCallback(
         () => {
             if (password === confirmPassword) {
-                request.open("PUT", 'http://localhost:5000/users/resetPassword', false); //false for synchronous request
+                request.open("PUT", 'http://mlkchess.fr:5000/users/resetPassword', false); //false for synchronous request
                 request.setRequestHeader("Content-type", "application/json");
                 request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));
                 request.send(JSON.stringify({

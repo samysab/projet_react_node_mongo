@@ -31,7 +31,7 @@ export function Conversation({ to, messages }) {
       setContent("");
       setAlert(false);
 
-      request.open("POST", 'http://localhost:5000/messages/', false); //false for synchronous request
+      request.open("POST", 'http://mlkchess.fr:5000/messages/', false); //false for synchronous request
       request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
       request.setRequestHeader("Content-type", "application/json");
       request.send(JSON.stringify({
@@ -54,7 +54,7 @@ export function Conversation({ to, messages }) {
 
   useEffect(
     () => {
-      request.open("PUT", 'http://localhost:5000/messages/changeStatus/' + idMessage, false); //false for synchronous request
+      request.open("PUT", 'http://mlkchess.fr:5000/messages/changeStatus/' + idMessage, false); //false for synchronous request
       request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
       request.setRequestHeader("Content-type", "application/json");
       request.send(JSON.stringify({}));
@@ -83,7 +83,7 @@ export function Conversation({ to, messages }) {
     } else {
       setAlert(false);
 
-      request.open("PUT", 'http://localhost:5000/messages/'+event.target.dataset.id, false); //false for synchronous request
+      request.open("PUT", 'http://mlkchess.fr:5000/messages/'+event.target.dataset.id, false); //false for synchronous request
       request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
       request.setRequestHeader("Content-type", "application/json");
       request.send(JSON.stringify({

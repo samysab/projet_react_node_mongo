@@ -33,7 +33,7 @@ export default function Register() {
     const save = useCallback(
         () => {
             if (password === confirmPassword) {
-                request.open("POST", 'http://localhost:5000/register', false);
+                request.open("POST", 'http://mlkchess.fr:5000/register', false);
                 request.setRequestHeader('Accept', 'application/json');
                 request.setRequestHeader("Content-type", "application/json");
                 request.send(JSON.stringify({

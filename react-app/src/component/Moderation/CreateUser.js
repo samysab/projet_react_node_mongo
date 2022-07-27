@@ -44,7 +44,7 @@ export default function CreateUser() {
 
     const save = useCallback(
         () => {
-            request.open("POST", 'http://localhost:5000/admin/create-user', false);
+            request.open("POST", 'http://mlkchess.fr:5000/admin/create-user', false);
             request.setRequestHeader('Accept', 'application/json');
             request.setRequestHeader("Content-type", "application/json");
             request.send(JSON.stringify({

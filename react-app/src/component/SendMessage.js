@@ -27,7 +27,7 @@ export function SendMessage({ to }) {
     } else {
       setAlert(false);
 
-      request.open("POST", 'http://localhost:5000/messages/', false); //false for synchronous request
+      request.open("POST", 'http://mlkchess.fr:5000/messages/', false); //false for synchronous request
       request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
       request.setRequestHeader("Content-type", "application/json");
       request.send(JSON.stringify({

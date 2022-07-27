@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
 
             const check = async () => {
-                request.open("GET", 'http://localhost:5000/users/checkUser', false);
+                request.open("GET", 'http://mlkchess.fr:5000/users/checkUser', false);
                 request.setRequestHeader("Content-type", "application/json");
                 request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));
                 request.send();

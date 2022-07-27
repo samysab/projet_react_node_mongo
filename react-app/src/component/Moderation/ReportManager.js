@@ -22,7 +22,7 @@ export default function ReportManager() {
 
     useEffect(() => {
         const fetchData = () => {
-            fetch(`http://localhost:5000/admin/reports`, myInit)
+            fetch(`http://mlkchess.fr:5000/admin/reports`, myInit)
                 .then((response) => {
                     return response.json();
                 })
@@ -43,7 +43,7 @@ export default function ReportManager() {
             body: JSON.stringify({status: "-1"})
         };
         const deleteReport = () => {
-            fetch(`http://localhost:5000/admin/delete-report/${id}`, deleteReportHeaders)
+            fetch(`http://mlkchess.fr:5000/admin/delete-report/${id}`, deleteReportHeaders)
                 .then(res => res.json())
 
         }

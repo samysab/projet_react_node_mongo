@@ -38,7 +38,7 @@ export default function ShowUser() {
 
     useEffect(() => {
         const fetchData = () => {
-            fetch(`http://localhost:5000/admin/show-user/${params.id}`, myInit)
+            fetch(`http://mlkchess.fr:5000/admin/show-user/${params.id}`, myInit)
                 .then((response) => {
                     setStatus(response.status);
                     setStatusText(response.statusText);
@@ -62,7 +62,7 @@ export default function ShowUser() {
             body: JSON.stringify({status: "-1"})
         };
         const deleteUser = () => {
-            fetch(`http://localhost:5000/admin/delete-user/${params.id}`, deleteUserHeaders)
+            fetch(`http://mlkchess.fr:5000/admin/delete-user/${params.id}`, deleteUserHeaders)
                 .then(x => console.log(x))
         }
         deleteUser();
@@ -79,7 +79,7 @@ export default function ShowUser() {
             body: JSON.stringify({status: "-2"})
         };
         const deleteUser = () => {
-            fetch(`http://localhost:5000/admin/delete-user/${params.id}`, deleteUserHeaders)
+            fetch(`http://mlkchess.fr:5000/admin/delete-user/${params.id}`, deleteUserHeaders)
                 .then(res => res.json())
                 .then(data => {
                     setStatus(data.status);
@@ -107,7 +107,7 @@ export default function ShowUser() {
         };
 
         const sendMessage = () => {
-            fetch(`http://localhost:5000/admin/warn-user`, postMessageHeaders)
+            fetch(`http://mlkchess.fr:5000/admin/warn-user`, postMessageHeaders)
                 .then(data => {
                     setStatus(data.status);
                     setStatusText(data.statusText);
@@ -126,7 +126,7 @@ export default function ShowUser() {
 
     useEffect(() => {
         const fetchData = () => {
-            fetch(`http://localhost:5000/messages`, myInit2)
+            fetch(`http://mlkchess.fr:5000/messages`, myInit2)
                 .then((response) => {
                     return response.json();
                 })

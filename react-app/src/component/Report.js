@@ -32,7 +32,7 @@ export default function Report() {
 
     useEffect( () =>{
 
-        request.open("GET", `http://localhost:5000/users/user/${params.id}`, false);
+        request.open("GET", `http://mlkchess.fr:5000/users/user/${params.id}`, false);
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
@@ -51,7 +51,7 @@ export default function Report() {
     
         if (["Harcèlement", "Faux profile","Message inapproprié"].includes(reason) && description != ""){
            
-            request.open("POST", 'http://localhost:5000/users/report', false);
+            request.open("POST", 'http://mlkchess.fr:5000/users/report', false);
             request.setRequestHeader("Content-type", "application/json");
             request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
             request.send(JSON.stringify({

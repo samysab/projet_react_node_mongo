@@ -23,7 +23,7 @@ export default function FriendRequest() {
                 setFriendsRequest(JSON.parse(request.responseText)[0].follower);
             }
         }
-        request.open( "GET", 'http://localhost:5000/users/friend-request', false );
+        request.open( "GET", 'http://mlkchess.fr:5000/users/friend-request', false );
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
 
@@ -34,7 +34,7 @@ export default function FriendRequest() {
 
        
         const request = new XMLHttpRequest();
-        request.open( "PUT", `http://localhost:5000/users/friend-request/accept/${id}`, false ); 
+        request.open( "PUT", `http://mlkchess.fr:5000/users/friend-request/accept/${id}`, false );
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();
@@ -43,7 +43,7 @@ export default function FriendRequest() {
         let user = newFriendsRequest.find(user => user.relationship.id == id);
         let index = newFriendsRequest.findIndex(user => user.relationship.id == id);
 
-        request.open( "POST", `http://localhost:5000/users/follow`, false ); 
+        request.open( "POST", `http://mlkchess.fr:5000/users/follow`, false );
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send(JSON.stringify({
@@ -60,7 +60,7 @@ export default function FriendRequest() {
 
     const refuse = useCallback ( (id) => {
         const request = new XMLHttpRequest();
-        request.open( "PUT", `http://localhost:5000/users/friend-request/refuse/${id}`, false ); 
+        request.open( "PUT", `http://mlkchess.fr:5000/users/friend-request/refuse/${id}`, false );
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
         request.send();

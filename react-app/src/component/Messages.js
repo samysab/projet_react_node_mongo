@@ -30,7 +30,7 @@ export default function Messages() {
         console.error(request.statusText);
       }
     }
-    request.open("GET", 'http://localhost:5000/users/friends', false);
+    request.open("GET", 'http://mlkchess.fr:5000/users/friends', false);
     request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
     request.send();
 
@@ -45,7 +45,7 @@ export default function Messages() {
         setNbMessages(JSON.parse(request.responseText));
       }
     }
-    request.open("GET", 'http://localhost:5000/messages/', false);
+    request.open("GET", 'http://mlkchess.fr:5000/messages/', false);
     request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
     request.send();
 
@@ -59,7 +59,7 @@ export default function Messages() {
         setMessages(JSON.parse(request.responseText));
       }
     }
-    request.open("GET", 'http://localhost:5000/messages/getAllMessagesPerUser/' + value, false);
+    request.open("GET", 'http://mlkchess.fr:5000/messages/getAllMessagesPerUser/' + value, false);
     request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
     request.send();
 
@@ -92,7 +92,7 @@ export default function Messages() {
       contentRefConv.current.focus();
       console.log("Erreur dans le contenu du message");
     } else {
-      request.open("POST", 'http://localhost:5000/messages/', false); //false for synchronous request
+      request.open("POST", 'http://mlkchess.fr:5000/messages/', false); //false for synchronous request
       request.setRequestHeader('Authorization', 'Bearer ' + cookie.get('token'));
       request.setRequestHeader("Content-type", "application/json");
       request.send(JSON.stringify({

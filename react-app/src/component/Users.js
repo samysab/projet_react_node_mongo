@@ -27,7 +27,7 @@ export default function Users() {
                 
                 }
             }
-            request.open( "GET", 'http://localhost:5000/users/users', false );
+            request.open( "GET", 'http://mlkchess.fr:5000/users/users', false );
             request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
             request.send();
         }else{
@@ -37,7 +37,7 @@ export default function Users() {
                     setUsers(JSON.parse(request.responseText));
                 }
             }
-            request.open( "GET", `http://localhost:5000/users/search/${value}`, false ); 
+            request.open( "GET", `http://mlkchess.fr:5000/users/search/${value}`, false );
             request.setRequestHeader("Content-type", "application/json");
             request.setRequestHeader('Authorization', "Bearer " + cookies.get('token'));
             request.send();

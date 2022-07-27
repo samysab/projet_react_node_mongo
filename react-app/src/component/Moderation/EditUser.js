@@ -48,7 +48,7 @@ export default function EditUser() {
 
     useEffect(() => {
         const fetchData = () => {
-            fetch(`http://localhost:5000/admin/show-user/${params.id}`, myInit)
+            fetch(`http://mlkchess.fr:5000/admin/show-user/${params.id}`, myInit)
                 .then((response) => {
                     return response.json();
                 })
@@ -64,7 +64,7 @@ export default function EditUser() {
     const updatePassword = useCallback(
         () => {
             if (password === confirmPassword) {
-                request.open("PUT", 'http://localhost:5000/users/resetPassword', false); //false for synchronous request
+                request.open("PUT", 'http://mlkchess.fr:5000/users/resetPassword', false); //false for synchronous request
                 request.setRequestHeader("Content-type", "application/json");
                 request.setRequestHeader("Authorization", "Bearer " + cookies.get('token'));
                 request.send(JSON.stringify({
