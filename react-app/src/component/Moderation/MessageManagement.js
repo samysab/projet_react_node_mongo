@@ -58,10 +58,11 @@ export default function MessageManagement() {
                                 messages.map(message => {
                                     console.log(messages);
                                     return (
-                                        <tr key={message.id}>
+                                        <tr key={message.id} className={ message.msgstatus !== 1 ? "alert alert-warning" : ""}>
                                             <td>
                                                 <p>{message.id}</p>
                                                 <p>{message.content}</p>
+                                                <p>Statut : {message.msgstatus !== -1 ? "Correct" : "Signalé"}</p>
                                                 <p>From : {message.userfrom}</p>
                                                 <p>To : {message.userto}</p>
                                             </td>
