@@ -97,7 +97,8 @@ export default function ShowUser() {
                 content: message,
                 status: 1,
                 from: auth.user.id,
-                to: user.id
+                to: user.id,
+                isWarning: true
             })
         };
 

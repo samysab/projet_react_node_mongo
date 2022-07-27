@@ -56,7 +56,6 @@ export default function MessageManagement() {
                             <tbody>
                             {
                                 messages.map(message => {
-                                    console.log(messages);
                                     return (
                                         <tr key={message.id} className={ message.msgstatus !== 1 ? "alert alert-warning" : ""}>
                                             <td>

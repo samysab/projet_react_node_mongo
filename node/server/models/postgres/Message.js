@@ -27,6 +27,11 @@ Message.init(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        isWarning: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
     },
     {
         sequelize,
