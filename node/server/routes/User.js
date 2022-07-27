@@ -10,6 +10,7 @@ const checkAuthentication = require("../middlewares/checkAuthentication");
 const { Op, QueryTypes } = require("sequelize");
 const connection = require("../models/postgres/db");
 const router = new Router();
+const logger = require("../lib/logger");
 
 
 
@@ -132,6 +133,7 @@ router.put("/friend-request/refuse/:id", async (req, res) =>{
 router.post("/follow", async (req, res) => {
   try {
     const result = await Relationship.create(req.body);
+    logger.info(`Follow user ID : ${req.body.following}`);
     res.status(201).json(result);
   } catch (error) {
     if (error instanceof ValidationError) {
@@ -149,12 +151,14 @@ router.post("/report", async (req, res) => {
     const result = await Report.create(req.body);
 
     if (result[0] === 0) {
+      logger.error(`Report user error : ${req.body.id}`);
       res.status(401);
       res.send({
         success: false,
         message: 'Error',
       });
     }else {
+      logger.info(`Report user : ${req.body.id}`);
       res.status(201);
       res.send({
         success: true,
@@ -190,8 +194,10 @@ router.get("/friend-request", async (req, res) => {
         },
       ],
     });
+    logger.info(`Get friend request to USER : ${req.user.dataValues.id}`);
     res.json(result);
   } catch (error) {
+    logger.error(`ERROR Get friend request to USER : ${error}`);
     res.sendStatus(500);
     console.error(error);
   }
@@ -218,6 +224,7 @@ router.get("/friends", async (req, res) => {
     });
     res.json(result);
   } catch (error) {
+    logger.error(`Get friends by user error : ${error}`);
     res.sendStatus(500);
     console.error(error);
   }
@@ -236,6 +243,7 @@ router.get("/invitation-sent", async (req, res) => {
     );
     res.json(result);
   } catch (error) {
+    logger.info(`Error sent invitation : ${error}`);
     res.sendStatus(500);
     console.error(error);
   }
@@ -266,6 +274,7 @@ router.get("/users", async (req, res) => {
     });
     res.json(result);
   } catch (error) {
+    logger.error(`Get users error : ${error}`);
     res.sendStatus(500);
     console.error(error);
   }

@@ -26,6 +26,7 @@ import UserManagement from "./component/Moderation/UserManagement";
 import ShowUser from "./component/Moderation/ShowUser";
 import MessageManagement from "./component/Moderation/MessageManagement";
 import CreateUser from "./component/Moderation/CreateUser";
+import EditUser from "./component/Moderation/EditUser";
 
 function App() {
 
@@ -93,7 +94,7 @@ function App() {
                 }/>
 
                 <Route path="/admin/edit-user/:id" element={
-                    <ShowUser/>
+                    <EditUser/>
                 }/>
 
                 <Route path="/admin/create-user" element={
