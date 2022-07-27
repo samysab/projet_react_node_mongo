@@ -27,6 +27,7 @@ import ShowUser from "./component/Moderation/ShowUser";
 import MessageManagement from "./component/Moderation/MessageManagement";
 import CreateUser from "./component/Moderation/CreateUser";
 import EditUser from "./component/Moderation/EditUser";
+import ReportManager from "./component/Moderation/ReportManager";
 
 function App() {
 
@@ -35,20 +36,14 @@ function App() {
             <Menu/>
             <Routes>
                 <Route path="/" element={
-                    <CheckAuth>
                         <Login/>
-                    </CheckAuth>
                 }/>
                 <Route path="/register" element={
-                    <CheckAuth>
                         <Register/>
-                    </CheckAuth>
                 }/>
 
                 <Route path="/profile" element={
-                    <RequireAuth>
                         <Profile/>
-                    </RequireAuth>
                 }/>
 
                 <Route path="/users/users" element={
@@ -91,6 +86,10 @@ function App() {
 
                 <Route path="/admin/show-user/:id" element={
                     <ShowUser/>
+                }/>
+
+                <Route path="/admin/manage-reports" element={
+                    <ReportManager/>
                 }/>
 
                 <Route path="/admin/edit-user/:id" element={
