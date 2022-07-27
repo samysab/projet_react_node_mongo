@@ -95,9 +95,10 @@ export default function ShowUser() {
             cache: 'default',
             body: JSON.stringify({
                 content: message,
-                status: true,
+                status: 1,
                 from: auth.user.id,
-                to: user.id
+                to: user.id,
+                isWarning: true
             })
         };
 

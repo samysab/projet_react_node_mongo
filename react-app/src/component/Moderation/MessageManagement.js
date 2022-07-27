@@ -1,8 +1,9 @@
 import React, {Fragment, useCallback, useEffect, useState} from "react";
 import Sidebar from "./Sidebar";
 import Cookies from "universal-cookie";
-import {Col, Row, Table} from "react-bootstrap";
+import {Button, Col, Container, Row, Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import {BsFillPersonXFill, BsFillTrashFill, BsTelegram} from "react-icons/bs";
 
 export default function MessageManagement() {
 
@@ -34,41 +35,95 @@ export default function MessageManagement() {
         fetchData();
     }, []);
 
+    const ban = useCallback((id) => {
+        myHeaders.set('Accept', 'application/json');
+        myHeaders.set('Content-Type', 'application/json');
+        const deleteUserHeaders = {
+            method: 'PUT',
+            headers: myHeaders,
+            mode: 'cors',
+            cache: 'default',
+            body: JSON.stringify({status: "-2"})
+        };
+        const deleteUser = () => {
+            fetch(`http://localhost:5000/admin/delete-user/${id}`, deleteUserHeaders)
+                .then(res => res.json())
+                .then(data => {
+                    setStatus(data.status);
+                    setStatusText(data.statusText);
+                })
+        }
+        deleteUser();
+    }, []);
+
+    const deleteMessage = useCallback((id) => {
+        myHeaders.set('Accept', 'application/json');
+        myHeaders.set('Content-Type', 'application/json');
+        const deleteUserHeaders = {
+            method: 'PUT',
+            headers: myHeaders,
+            mode: 'cors',
+            cache: 'default',
+            body: JSON.stringify({status: "-2"})
+        };
+        const deleteUser = () => {
+            fetch(`http://localhost:5000/admin/delete-message/${id}`, deleteUserHeaders)
+                .then(res => res.json())
+                .then(data => {
+                    setStatus(data.status);
+                    setStatusText(data.statusText);
+                })
+        }
+        deleteUser();
+    }, []);
+
     return (
         <Fragment>
-            <Row>
-                <Col className="col col-md-4">
-                    <Sidebar/>
-                </Col>
-                <Col className="col col-md-8">
-                    <Table striped bordered hover>
-                        <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            messages.map( message => {
-                                return (
-                                    <tr key={message.id}>
-                                        <td>
-                                            <p>{message.id}</p>
-                                            <p>{message.content}</p>
-                                        </td>
-                                        <td>
-                                            <Link className="btn btn-primary" to={`/show-user/${message.id}`}>Voir le profil</Link>
-                                        </td>
-                                    </tr>
+            <Container className="m-0">
+                <Row>
+                    <Col className={"p-0"} md={3}>
+                        <Sidebar/>
+                    </Col>
+                    <Col md={9}>
+                        <Table striped bordered hover>
+                            <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                messages.map(message => {
+                                    return (
 
-                                );
-                            })
-                        }
-                        </tbody>
-                    </Table>
-                </Col>
-            </Row>
+                                        <tr key={message.idmess}
+                                            className={message.isWarning ? "alert alert-warning" : ""}>
+                                            <td>
+                                                <p>{message.idmess}</p>
+                                                <p>Contenu du message: "{message.content}"</p>
+                                                <p>Statut : {message.msgstatus}</p>
+                                                <p>From : {message.userfrom}</p>
+                                                <p>To : {message.userto}</p>
+                                            </td>
+                                            <td>
+                                                <Button onClick={() => deleteMessage(message.idmess)} className="btn btn-danger">
+                                                    <BsFillTrashFill/>
+                                                </Button>
+                                                <Button onClick={() => ban(message.from)} className="btn btn-warning">
+                                                    Bannir l'expéditeur ({message.userfrom}) <BsFillPersonXFill/>
+                                                </Button>
+                                            </td>
+                                        </tr>
+
+                                    );
+                                })
+                            }
+                            </tbody>
+                        </Table>
+                    </Col>
+                </Row>
+            </Container>
         </Fragment>
     );
 }

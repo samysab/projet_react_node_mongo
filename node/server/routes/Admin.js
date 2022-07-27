@@ -1,6 +1,6 @@
-const { Router } = require("express");
-const { User, Report} = require("../models/postgres");
-const { ValidationError } = require("sequelize");
+const {Router} = require("express");
+const {User, Report} = require("../models/postgres");
+const {ValidationError} = require("sequelize");
 const checkIsAdmin = require("../middlewares/checkIsAdmin");
 const Message = require("../models/postgres/Message");
 const crypto = require("crypto");
@@ -84,7 +84,7 @@ router.post("/create-user", async (req, res) => {
             password: password,
             isAdmin: req.body.isAdmin.value,
             firstname: req.body.firstname,
-            status:req.body.status.value,
+            status: req.body.status.value,
             token: token,
             technologies: JSON.stringify(req.body.technologies)
         });
@@ -115,10 +115,10 @@ router.post("/create-user", async (req, res) => {
 //Garder dans la DB mais mettre email par défaut
 router.put("/delete-user/:id", async (req, res) => {
     try {
-        if(req.body.status === "-1") { // Suppression d'un compte (possibilité de récupérer son compte)
-            const [nbLines, [result]] = await User.update(
+        if (req.body.status === "-1") { // Suppression d'un compte (possibilité de récupérer son compte)
+            const result = await User.update(
                 {
-                    email: "default-"+ req.params.id +"@default.com",
+                    email: "default-" + req.params.id + "@default.com",
                     status: req.body.status
                 }, {
                     where: {
@@ -127,9 +127,14 @@ router.put("/delete-user/:id", async (req, res) => {
                     returning: true,
                 });
 
+            if (!result) {
+                res.sendStatus(404);
+            } else {
+                res.json(result);
+            }
 
-        }else if (req.body.status === "-2"){ //Suppression de tous les liens d'amitié mais garder l'email
-            const [nbLines, [result]] = await User.update(
+        } else if (req.body.status === "-2") { //Suppression de tous les liens d'amitié mais garder l'email
+            const result = await User.update(
                 {
                     status: req.body.status
                 }, {
@@ -138,13 +143,14 @@ router.put("/delete-user/:id", async (req, res) => {
                     },
                     returning: true,
                 });
+
+            if (!result) {
+                res.sendStatus(404);
+            } else {
+                res.json(result);
+            }
         }
 
-        if (!nbLines) {
-            res.sendStatus(404);
-        } else {
-            res.json(result);
-        }
     } catch (error) {
         console.log(error);
 
@@ -154,7 +160,38 @@ router.put("/delete-user/:id", async (req, res) => {
             res.sendStatus(500);
             console.error(error);
         }
-    }});
+    }
+});
+
+router.put("/delete-message/:id", async (req, res) => {
+    try {
+        const result = await Message.update(
+            {
+                status: req.body.status
+            }, {
+                where: {
+                    id: parseInt(req.params.id, 10),
+                },
+                returning: true,
+            });
+
+        if (!result) {
+            res.sendStatus(404);
+        } else {
+            res.json(result);
+        }
+
+    } catch (error) {
+        console.log(error);
+
+        if (error instanceof ValidationError) {
+            res.status(422).json(formatError(error));
+        } else {
+            res.sendStatus(500);
+            console.error(error);
+        }
+    }
+});
 
 router.get("/manage-messages", async (req, res) => {
     res.send("Hello admin");
@@ -183,11 +220,11 @@ router.put("/filed-away/:id", async (req, res) => {
             {
                 "status": "-1"
             }, {
-            where: {
-                id: parseInt(req.params.id, 10),
-            },
-            returning: true,
-        });
+                where: {
+                    id: parseInt(req.params.id, 10),
+                },
+                returning: true,
+            });
         if (!nbLines) {
             res.sendStatus(404);
         } else {
