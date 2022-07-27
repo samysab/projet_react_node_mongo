@@ -10,8 +10,8 @@ const { Post: PostMongo } = require("../mongo");
 // exports.Post.belongsTo(exports.User);
 
 
-// exports.User.hasMany(exports.Report);
-// exports.Report.belongsTo(exports.User);
+exports.User.hasMany(exports.Report);
+exports.Report.belongsTo(exports.User);
 
 exports.User.hasMany(exports.Report);
 exports.Report.belongsTo(exports.User);

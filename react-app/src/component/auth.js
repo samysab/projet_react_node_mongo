@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
                 request.send();
 
 
-                if (request.response !== 'Unauthorized' && JSON.parse(request.response).success != false) {
+                if (request.response !== 'Unauthorized' && JSON.parse(request.response).success !== false) {
                     login(JSON.parse(request.response));
                    
                 }else{
