@@ -64,6 +64,7 @@ export default function ShowUser() {
         const deleteUser = () => {
             fetch(`http://mlkchess.fr:5000/admin/delete-user/${params.id}`, deleteUserHeaders)
                 .then(x => console.log(x))
+
         }
         deleteUser();
     }, []);
@@ -135,8 +136,6 @@ export default function ShowUser() {
         fetchData();
     }, []);
 
-    console.log(messages);
-
     return (
         <Fragment>
             <Row>
@@ -169,6 +168,7 @@ export default function ShowUser() {
                                 {
                                     messages.map(message => {
                                         return (
+                                            message.to === parseInt(params.id) ?
                                             <MessageList
                                                 className='message-list'
                                                 lockable={true}
@@ -182,7 +182,7 @@ export default function ShowUser() {
                                                             text: message.content
                                                         },
                                                     ]}
-                                            />
+                                            /> : ""
                                         )
                                     })
                                 }
