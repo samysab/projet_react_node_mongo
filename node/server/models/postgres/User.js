@@ -54,6 +54,7 @@ User.init(
     {
         sequelize,
         modelName: "user",
+	schema: 'public',
     }
 );
 

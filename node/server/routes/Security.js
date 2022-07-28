@@ -42,7 +42,7 @@ router.post("/register", async (req, res) => {
       technologies: JSON.stringify(req.body.technologies)
     });
 
-    let url = 'http://localhost:3000/confirmation/'+token;
+    let url = 'http://mlkchess.fr:3000/confirmation/'+token;
 
     await transporter.sendMail({
         from: "pa.express.esgi@gmail.com",
@@ -124,7 +124,7 @@ router.post("/reset", async (req, res) => {
         message: 'Error',
       });
     }else {
-      let url = 'http://localhost:3000/resetPassword/'+token;
+      let url = 'http://mlkchess.fr:3000/resetPassword/'+token;
 
       await transporter.sendMail({
         from: "pa.express.esgi@gmail.com",
